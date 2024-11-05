@@ -1,4 +1,4 @@
-[language.d]
+[languages.d]
 compile = "apt install ldc && ldc2 {path} --of={tempdir}/judge"
 execute = "{tempdir}/judge"
 bundle = "false"
