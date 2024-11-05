@@ -39,6 +39,9 @@ jobs:
         with:
           output-path: verify_files.json
           # Specify patterns
+          include: |
+                daylight
+                test
           exclude: |
                 .github/
                 atcoder
