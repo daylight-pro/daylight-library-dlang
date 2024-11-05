@@ -1,5 +1,5 @@
 [languages.d]
-compile = "sudo apt install -y ldc && ldc2 {path} --of={tempdir}/judge"
+compile = "sudo apt install -y ldc && ldc2 {path} --of={tempdir}/judge -I={basedir} -i"
 execute = "{tempdir}/judge"
 bundle = "false"
 list_dependencies = "sed 's/^import \\(.*\\);$/\\1/ ; t ; d' {path} | sed 's/\\./\\//g' | sed 's/^\\(.*\\)$/\\1.d/g'"
