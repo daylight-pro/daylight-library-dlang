@@ -44,7 +44,7 @@ jobs:
                 test
           exclude: |
                 .github/
-                atcoder
+                acl
           # If you have config.toml
           config: .verify-helper/config.toml
       - name: parse-doxygen
