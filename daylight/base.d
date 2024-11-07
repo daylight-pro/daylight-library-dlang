@@ -1,4 +1,4 @@
-module daylight.reader;
+module daylight.base;
 import std;
 
 // --- start ---
@@ -38,4 +38,20 @@ public:
         }
         return ret;
     }
+}
+
+bool chmin(ref T a, T b) {
+    if (a > b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+
+bool chmax(ref T a, T b) {
+    if (a < b) {
+        a = b;
+        return true;
+    }
+    return false;
 }
