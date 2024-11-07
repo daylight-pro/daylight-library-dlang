@@ -1,7 +1,7 @@
 module test.itp.p1_1_B.test;
 
 // verification-helper: PROBLEM https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_1_B
-import daylight.reader;
+import daylight.base;
 import std.stdio;
 
 void main() {
