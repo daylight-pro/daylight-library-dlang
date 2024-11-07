@@ -40,7 +40,7 @@ public:
     }
 }
 
-bool chmin(ref T a, T b) {
+bool chmin(T)(ref T a, T b) {
     if (a > b) {
         a = b;
         return true;
@@ -48,7 +48,7 @@ bool chmin(ref T a, T b) {
     return false;
 }
 
-bool chmax(ref T a, T b) {
+bool chmax(T)(ref T a, T b) {
     if (a < b) {
         a = b;
         return true;
