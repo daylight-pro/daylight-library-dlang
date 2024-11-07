@@ -2,7 +2,7 @@ module test.yosupo.aplusb;
 
 // verification-helper: PROBLEM https://judge.yosupo.jp/problem/aplusb
 import std;
-import daylight.reader;
+import daylight.base;
 
 void main() {
     Reader reader = new Reader();
