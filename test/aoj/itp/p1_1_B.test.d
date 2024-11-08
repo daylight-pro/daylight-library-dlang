@@ -6,6 +6,7 @@ import std.stdio;
 
 void main() {
     Reader reader = new Reader();
-    int x = reader.read!int();
+    int x;
+    reader.read(x);
     writeln(x * x * x);
 }

@@ -6,7 +6,7 @@ import daylight.base;
 
 void main() {
     Reader reader = new Reader();
-    int a = reader.read!int();
-    int b = reader.read!int();
+    int a, b;
+    reader.read(a, b);
     writeln(a + b);
 }
