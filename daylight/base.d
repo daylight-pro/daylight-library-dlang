@@ -24,7 +24,7 @@ public:
         if (buf.empty) {
             readNext();
         }
-        if (__traits(hasMember, T, "length")) {
+        static if (__traits(hasMember, T, "length")) {
             foreach (ref v; t) {
                 read(v);
             }
