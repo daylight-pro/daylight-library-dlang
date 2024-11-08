@@ -21,10 +21,9 @@ unittest {
 // --- start ---
 
 class BitVector {
-private:
-    int[] vec;
-    ulong len;
-public:
+    private int[] vec;
+    private ulong len;
+
     this(int[] v) {
         len = v.length;
         vec = new int[len + 1];
@@ -64,10 +63,9 @@ public:
 }
 
 class WaveletMatrixSlice(T) {
-private:
-    WaveletMatrix!T matrix;
-    size_t start, end;
-public:
+    private WaveletMatrix!T matrix;
+    private size_t start, end;
+
     this(WaveletMatrix!T matrix, size_t start, size_t end) {
         this.matrix = matrix;
         this.start = start;
@@ -152,14 +150,13 @@ public:
 }
 
 class WaveletMatrix(T) {
-private:
-    BitVector[] B;
-    T[][] acc;
-    int[] start_one;
-    int[T] start_num;
-    int len, bit_len;
-    T base = 0;
-public:
+    private BitVector[] B;
+    private T[][] acc;
+    private int[] start_one;
+    private int[T] start_num;
+    private int len, bit_len;
+    private T base = 0;
+
     this(ref T[] vec, bool use_acc = true) {
         foreach (e; vec)
             base.chmax(-e);
@@ -210,7 +207,7 @@ public:
     }
 
     T opIndex(size_t i) {
-        assert(i < len);
+        enforce(i < len, "Index out of bounds.");
         T ret = 0;
         foreach (j; 0 .. bit_len) {
             int b = B[j][i];
@@ -234,7 +231,7 @@ public:
 
     int rank(T c, int k) {
         c += base;
-        assert(k <= len);
+        enforce(k <= len);
         assert(k >= 0);
         if (!(c in start_num))
             return 0;
