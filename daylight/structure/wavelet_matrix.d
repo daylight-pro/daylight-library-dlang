@@ -38,7 +38,7 @@ public:
         return vec[i + 1] - vec[i];
     }
 
-    int[] opSlice(size_t start, size_t end) {
+    Tuple!(int, int) opSlice(size_t start, size_t end) {
         int r1 = vec[end] - vec[start];
         return [(end - start - r1).to!int, r1];
     }
