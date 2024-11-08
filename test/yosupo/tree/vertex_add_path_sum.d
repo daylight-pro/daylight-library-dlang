@@ -1,5 +1,7 @@
 module test.yosupo.tree.vertex_add_path_sum;
 
+// competitive-verifier: PROBLEM https://judge.yosupo.jp/problem/vertex_add_path_sum
+
 import std;
 import acl.fenwicktree;
 import daylight.base;
