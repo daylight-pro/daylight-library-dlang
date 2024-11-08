@@ -40,7 +40,7 @@ public:
 
     Tuple!(int, int) opSlice(size_t start, size_t end) {
         int r1 = vec[end] - vec[start];
-        return [(end - start - r1).to!int, r1];
+        return Tuple!((end - start - r1).to!int, r1);
     }
 
     size_t opDollar() {
