@@ -3,40 +3,36 @@ import std;
 
 // --- start ---
 class Reader {
-    string[] buf;
+    DList!(string) buf;
 
 private:
     void readNext() {
         while (buf.empty) {
             auto inputs = stdin.readln()[0 .. $ - 1].split(" ");
-            buf ~= inputs;
+            foreach (token; inputs) {
+                buf.insertBack(token);
+            }
         }
     }
 
 public:
-    T read(T)() {
+    void read()() {
+
+    }
+
+    void read(T, A...)(ref T t, ref A a) {
         if (buf.empty) {
             readNext();
         }
-        T ret = buf[0].to!T;
-        buf = buf[1 .. $];
-        return ret;
-    }
-
-    T[] read(T)(int n) {
-        T[] ret;
-        foreach (i; 0 .. n) {
-            ret ~= read!T();
+        if (__traits(hasMember, T, "length")) {
+            foreach (ref v; t) {
+                read(v);
+            }
+        } else {
+            t = buf.front.to!T;
+            buf.removeFront();
         }
-        return ret;
-    }
-
-    T[][] read(T)(int n, int m) {
-        T[][] ret;
-        foreach (i; 0 .. n) {
-            ret ~= read!T(m);
-        }
-        return ret;
+        read(a);
     }
 }
 
