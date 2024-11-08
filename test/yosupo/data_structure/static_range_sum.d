@@ -7,9 +7,9 @@ import daylight.structure.wavelet_matrix;
 
 void main() {
     Reader reader = new Reader();
-    int N = reader.read!int();
-    int Q = reader.read!int();
-    long[] A = reader.read!long(N);
+    int N, Q;
+    long[] A(N);
+    reader.read(N, Q, A);
     auto wm = new WaveletMatrix!long(A);
     foreach (i; 0 .. Q) {
         int l = reader.read!int();
