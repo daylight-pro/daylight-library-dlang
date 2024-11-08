@@ -5,8 +5,7 @@ import std;
 class Reader {
     DList!(string) buf;
 
-private:
-    void readNext() {
+    private void readNext() {
         while (buf.empty) {
             auto inputs = stdin.readln()[0 .. $ - 1].split(" ");
             foreach (token; inputs) {
@@ -15,7 +14,6 @@ private:
         }
     }
 
-public:
     void read()() {
 
     }
