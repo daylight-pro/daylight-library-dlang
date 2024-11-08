@@ -12,9 +12,8 @@ void main() {
     reader.read(N, Q, A);
     auto wm = new WaveletMatrix!long(A);
     foreach (i; 0 .. Q) {
-        int l = reader.read!int();
-        int r = reader.read!int();
-        int k = reader.read!int();
+        int l, r, k;
+        reader.read(l, r, k);
         writeln(wm[l .. r].kthMin(k));
     }
 }

@@ -12,9 +12,8 @@ void main() {
     reader.read(N, Q, A);
     auto wm = new WaveletMatrix!long(A);
     foreach (i; 0 .. Q) {
-        int l = reader.read!int();
-        int r = reader.read!int();
-        int x = reader.read!int();
+        int l, r, x;
+        reader.read(l, r, x);
         writeln(wm[l .. r].rangeFreq(x));
     }
 }
