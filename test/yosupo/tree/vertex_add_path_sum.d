@@ -11,7 +11,7 @@ void main() {
     Reader reader = new Reader();
     int N, Q;
     reader.read(N, Q);
-    int A[N];
+    int[] A = new int[A];
     reader.read(A);
     auto hld = new HLDecomposition(N);
     foreach (i; 0 .. N - 1) {
