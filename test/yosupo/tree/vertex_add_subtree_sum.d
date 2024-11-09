@@ -29,7 +29,7 @@ void main() {
         if (k == 0) {
             int u, x;
             reader.read(u, x);
-            fw.add(hld.index(u, x));
+            fw.add(hld.index(u), x);
         } else {
             int u;
             reader.read(u);
