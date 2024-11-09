@@ -10,6 +10,8 @@ void main() {
     Reader reader = new Reader();
     int N, Q;
     reader.read(N, Q);
+    int[] A = new int[N];
+    reader.read(A);
     HLDecomposition hld(N);
     foreach (i; 1 .. N) {
         int p;
