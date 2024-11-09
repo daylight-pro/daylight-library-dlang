@@ -49,3 +49,9 @@ bool chmax(T)(ref T a, T b) {
     }
     return false;
 }
+
+template bind(names...) {
+    auto bind(T)(T t) {
+        return tuple!(aliasSeqOf!(tuple(names)))(t.expand);
+    }
+}
