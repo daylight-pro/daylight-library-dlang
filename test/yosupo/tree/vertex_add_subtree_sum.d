@@ -12,7 +12,7 @@ void main() {
     reader.read(N, Q);
     int[] A = new int[N];
     reader.read(A);
-    HLDecomposition hld(N);
+    auto hld = new HLDecomposition(N);
     foreach (i; 1 .. N) {
         int p;
         reader.read(p);
