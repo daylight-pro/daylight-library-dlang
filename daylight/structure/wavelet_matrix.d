@@ -165,7 +165,7 @@ class WaveletMatrix(T) {
         long max_el = 1;
         if (vec.length > 0)
             max_el = reduce!(max)(vec) + 1;
-        bit_len = bsr() + 1;
+        bit_len = bsr(max_el) + 1;
         len = vec.length.to!int;
         if (use_acc)
             acc = new T[][](bit_len, len + 1);
