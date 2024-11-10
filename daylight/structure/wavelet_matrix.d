@@ -158,6 +158,8 @@ class WaveletMatrix(T) {
     private T base = 0;
 
     this(ref T[] vec, bool use_acc = true) {
+        import core.bitop;
+
         foreach (e; vec)
             base.chmax(-e);
         foreach (ref e; vec)
