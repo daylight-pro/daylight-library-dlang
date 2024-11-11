@@ -1,5 +1,5 @@
 [languages.d]
-compile = "mkdir -p ~/dlang && wget https://dlang.org/install.sh -O ~/dlang/install.sh && chmod +x ~/dlang/install.sh && ~/dlang/install.sh install ldc-1.36.0 && source ~/dlang/ldc-1.36.0/activate && ldc2 {path} -O -release --of={tempdir}/judge -I={basedir} -i"
+compile = "mkdir -p ~/dlang && wget https://dlang.org/install.sh -O ~/dlang/install.sh && chmod +x ~/dlang/install.sh && ~/dlang/install.sh install ldc-1.36.0 && . ~/dlang/ldc-1.36.0/activate && ldc2 {path} -O -release --of={tempdir}/judge -I={basedir} -i"
 execute = "{tempdir}/judge"
 bundle = "false"
 list_dependencies = "sed 's/^import \\(.*\\);$/\\1/ ; t ; d' {path} | sed 's/\\./\\//g' | sed 's/^\\(.*\\)$/\\1.d/g'"
