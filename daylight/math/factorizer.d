@@ -5,8 +5,9 @@ import std;
 unittest {
     auto factorizer = new Factorizer();
     assert(factorizer.isPrime(11));
+    assert(factorizer.isPrime(3));
     assert(!factorizer.isPrime(57));
-
+    assert(factorizer.factorize(9)[3] == 2);
 }
 
 // --- start ---
@@ -77,7 +78,7 @@ class Factorizer {
     private long findPrimeFactor(long n) {
         if (n % 2 == 0)
             return 2;
-        int b = (n.to!double.sqrt.sqrt.sqrt + 1).floor.to!int;
+        int b = (n.to!double.sqrt.sqrt.sqrt).floor.to!int + 1;
         foreach (c; 1 .. n) {
             long f(long a) {
                 return powMod(a, 2, n) + c;
