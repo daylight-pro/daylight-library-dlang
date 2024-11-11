@@ -66,7 +66,7 @@ class Factorizer {
         }
     }
 
-    private int[long] factorizeUsingSieve(long n) {
+    int[long] factorizeUsingSieve(long n) {
         int[long] res;
         while (n > 1) {
             res[sieve[n]]++;
@@ -132,7 +132,7 @@ class Factorizer {
         assert(false);
     }
 
-    private int[long] rho(long n) {
+    int[long] rho(long n) {
         int[long] ret;
         while (!isPrime(n) && n > 1) {
             long p = findPrimeFactor(n);
