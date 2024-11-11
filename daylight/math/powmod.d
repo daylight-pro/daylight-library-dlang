@@ -1,14 +1,16 @@
 module daylight.math.powmod;
 
+import std;
+
 // --- start ---
 
 long powMod(long a, long p, long m) {
-    long ret = 1;
-    long mul = a;
+    auto ret = Int128(1L);
+    auto mul = Int128(1L);
     for (; p > 0; p >>= 1) {
         if (p & 1)
             ret = (ret * mul) % m;
         mul = (mul * mul) % m;
     }
-    return ret;
+    return ret.to!long;
 }

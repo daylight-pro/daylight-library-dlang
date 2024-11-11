@@ -75,8 +75,6 @@ class Factorizer {
     }
 
     private long findPrimeFactor(long n) {
-        import std.int128;
-
         if (n % 2 == 0)
             return 2;
         int b = (n.to!double.sqrt.sqrt.sqrt + 1).floor.to!int;
