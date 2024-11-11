@@ -65,8 +65,10 @@ class Factorizer {
         }
     }
 
-    private BigInt gcdForBigInt(BigInt x, BigInt y) {
-        BigInt r = 0;
+    import std.int128;
+
+    private Int128 gcdForI128(Int128 x, Int128 y) {
+        auto r = Int128(0L);
         if (x < y)
             swap(x, y);
         while (y > 0) {
@@ -97,7 +99,7 @@ class Factorizer {
 
             long y = 6;
             long g = 1;
-            BigInt q = 1;
+            auto q = Int128(1L);
             int r = 1;
             int k = 0;
             long ys = 0;
@@ -115,7 +117,7 @@ class Factorizer {
                         q *= abs(x - y);
                         q %= n;
                     }
-                    g = gcdForBigInt(q, BigInt(n)).toLong();
+                    g = gcdForI128(q, Int128(n)).to!int;
                     k += b;
                 }
                 k = r;
