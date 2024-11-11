@@ -65,20 +65,6 @@ class Factorizer {
         }
     }
 
-    import std.int128;
-
-    private Int128 gcdForI128(Int128 x, Int128 y) {
-        auto r = Int128(0L);
-        if (x < y)
-            swap(x, y);
-        while (y > 0) {
-            r = x % y;
-            x = y;
-            y = r;
-        }
-        return x;
-    }
-
     private int[long] factorizeUsingSieve(long n) {
         int[long] res;
         while (n > 1) {
@@ -89,6 +75,8 @@ class Factorizer {
     }
 
     private long findPrimeFactor(long n) {
+        import std.int128;
+
         if (n % 2 == 0)
             return 2;
         int b = (n.to!double.sqrt.sqrt.sqrt + 1).floor.to!int;
@@ -117,7 +105,7 @@ class Factorizer {
                         q *= abs(x - y);
                         q %= n;
                     }
-                    g = gcdForI128(q, Int128(n)).to!int;
+                    g = gcd(q.to!long, n).to!long;
                     k += b;
                 }
                 k = r;
