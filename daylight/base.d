@@ -34,20 +34,18 @@ class Reader {
     }
 }
 
-bool chmin(T)(ref T a, T b) {
+ref auto chmin(T)(ref T a, T b) {
     if (a > b) {
         a = b;
-        return true;
     }
-    return false;
+    return a;
 }
 
-bool chmax(T)(ref T a, T b) {
+ref auto chmax(T)(ref T a, T b) {
     if (a < b) {
         a = b;
-        return true;
     }
-    return false;
+    return a;
 }
 
 template bind(names...) {
