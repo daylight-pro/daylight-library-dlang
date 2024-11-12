@@ -53,3 +53,6 @@ template bind(names...) {
         return tuple!(aliasSeqOf!(tuple(names)))(t.expand);
     }
 }
+
+public const int INF = 1 << 30;
+public const long LINF = 2e18.to!long;
