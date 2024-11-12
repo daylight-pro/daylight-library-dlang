@@ -1,7 +1,7 @@
 module daylight.doubling;
 
 unittest {
-    auto db = new Doubling!(true)([1, 2, 3, 4, 0]);
+    auto db = new Doubling!(long)([1, 2, 3, 4, 0]);
 }
 
 import std;
