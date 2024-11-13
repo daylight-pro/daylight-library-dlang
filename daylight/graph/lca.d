@@ -70,7 +70,7 @@ class LCA(T = long) {
     }
 
     int jump(int from, int to, int cnt) {
-        if (cnt < 0 || get_simple_dis(from, to) < cnt)
+        if (cnt < 0 || getSimpleDistance(from, to) < cnt)
             return -1;
         int l = query(from, to);
         if (cnt <= getSimpleDistance(from, l)) {

@@ -3,6 +3,7 @@ module test.yosupo.tree.lca;
 // competitive-verifier: PROBLEM https://judge.yosupo.jp/problem/lca
 import std;
 
+import daylight.base;
 import daylight.graph.base;
 import daylight.graph.builder;
 import daylight.graph.lca;
