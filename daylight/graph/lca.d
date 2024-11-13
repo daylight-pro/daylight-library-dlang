@@ -4,7 +4,7 @@ import std;
 import daylight.base;
 import daylight.graph.base;
 
-class LCA(T) {
+class LCA(T = long) {
     private static const int max_bit = 20;
     private int K = 1;
     private int[][max_bit] parent;
