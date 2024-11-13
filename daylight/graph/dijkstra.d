@@ -8,7 +8,7 @@ import daylight.graph.base;
 
 long[] dijkstra(int start, const ref Graph!(long) G) {
     alias P = Tuple!(long, int);
-    BinaryHeap!(Array!P) bh;
+    BinaryHeap!(Array!P, "a > b") bh;
     long[] D = new long[G.length];
     D[] = LINF;
     D[start] = 0;
