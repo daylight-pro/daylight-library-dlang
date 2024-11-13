@@ -1,3 +1,5 @@
+module daylight.graph.lca;
+
 import std;
 
 // --- start ---
@@ -10,6 +12,7 @@ class LCA(T = long) {
     private int[][] parent;
     private T[] dis;
     private int[] simple_dis;
+
     private void dfs(int cur, int pre, const ref Graph!T G, T d, int sd) {
         parent[cur][0] = pre;
         dis[cur] = d;

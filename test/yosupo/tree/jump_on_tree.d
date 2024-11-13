@@ -13,7 +13,7 @@ void main() {
     int N, Q;
     reader.read(N, Q);
 
-    auto G = (new GraphBuilder!()(N)).setIndex(0).useTreeFormat().build(reader);
+    auto G = (new GraphBuilder!()(N)).setIndex(0).build(reader);
     auto lca = new LCA!()(G);
     while (Q--) {
         int s, t, i;
