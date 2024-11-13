@@ -4,6 +4,7 @@ module test.aoj.grl.p1_A;
 import std;
 import daylight.base;
 import daylight.graph.base;
+import daylight.graph.builder;
 import daylight.graph.dijkstra;
 
 void main() {
