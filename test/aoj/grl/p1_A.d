@@ -11,7 +11,7 @@ void main() {
     Reader reader = new Reader();
     int V, E, r;
     reader.read(V, E, r);
-    auto G = (new GraphBuilder!()(V, E)).weighted().directed().setIndex(0).build();
+    auto G = (new GraphBuilder!()(V, E)).weighted().directed().setIndex(0).build(reader);
     auto d = dijkstra(r, G);
     foreach (x; d) {
         if (x == LINF) {
