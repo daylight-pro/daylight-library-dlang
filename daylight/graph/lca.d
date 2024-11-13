@@ -17,15 +17,15 @@ class LCA(T = long) {
         foreach (e; G[cur]) {
             if (e.to == pre)
                 continue;
-            dfs(e.to, cur, G, d + e.cost, sd + 1);
+            dfs(e.to, cur, G, d + e.info, sd + 1);
         }
     }
 
     this(const ref Graph!T G) {
-        int N = G.length;
+        ulong N = G.length;
         while ((1 << K) < N)
             K++;
-        parent = new int[N][max_bit];
+        parent = new int[][](N, max_bit);
         foreach (i; 0 .. N) {
             parent[i][] = -1;
         }
@@ -73,7 +73,7 @@ class LCA(T = long) {
         if (cnt < 0 || get_simple_dis(from, to) < cnt)
             return -1;
         int l = query(from, to);
-        if (cnt <= getSimpleDis(from, l)) {
+        if (cnt <= getSimpleDistance(from, l)) {
             int cur = from;
             foreach (i; 0 .. K) {
                 if (cnt >> i & 1)
@@ -81,7 +81,7 @@ class LCA(T = long) {
             }
             return cur;
         }
-        cnt = getSimpleDis(from, to) - cnt;
+        cnt = getSimpleDistance(from, to) - cnt;
         int cur = to;
         foreach (i; 0 .. K) {
             if (cnt >> i & 1)
