@@ -7,7 +7,7 @@ import daylight.graph.base;
 class LCA(T = long) {
     private static const int max_bit = 20;
     private int K = 1;
-    private int[][max_bit] parent;
+    private int[][] parent;
     private T[] dis;
     private int[] simple_dis;
     private void dfs(int cur, int pre, const ref Graph!T G, T d, int sd) {
