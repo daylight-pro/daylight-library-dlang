@@ -53,4 +53,8 @@ struct RollingHash {
     ulong opSlice(size_t start, size_t end) {
         return query(start, end - start);
     }
+
+    size_t opDollar() {
+        return hash.length.to!int - 1;
+    }
 }
