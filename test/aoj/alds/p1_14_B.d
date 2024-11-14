@@ -12,7 +12,7 @@ void main() {
     reader.read(P, T);
     auto hP = RollingHash(P), hT = RollingHash(T);
     ulong N = T.length;
-    foreach (i; 0 .. P.length - T.length + 1) {
+    foreach (i; 0 .. P.length.to!int - T.length.to!int + 1) {
         if (hP[i .. i + N] == hT[0 .. N]) {
             writeln(i);
         }
