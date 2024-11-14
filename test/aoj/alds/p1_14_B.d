@@ -1,5 +1,7 @@
 module test.aoj.alds.p1_14_B;
 
+// competitive-verifier: PROBLEM https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_14_B
+
 import std;
 import daylight.base;
 import daylight.string.rolling_hash;
