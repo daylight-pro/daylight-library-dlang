@@ -1,25 +1,21 @@
 module acl.dsu;
 
-unittest
-{
+unittest {
     auto uf = Dsu(0);
     assert([] == uf.groups());
 }
 
-unittest
-{
+unittest {
     Dsu uf;
     assert([] == uf.groups());
 }
 
-unittest
-{
+unittest {
     Dsu uf;
     uf = Dsu(10);
 }
 
-unittest
-{
+unittest {
     auto uf = Dsu(2);
     assert(!uf.same(0, 1));
     int x = uf.merge(0, 1);
@@ -29,8 +25,7 @@ unittest
     assert(2 == uf.size(0));
 }
 
-unittest
-{
+unittest {
     int n = 500_000;
     auto uf = Dsu(n);
     foreach (i; 0 .. n - 1)
@@ -39,8 +34,7 @@ unittest
     assert(1 == uf.groups().length);
 }
 
-unittest
-{
+unittest {
     int n = 500_000;
     auto uf = Dsu(n);
     foreach_reverse (i; 0 .. n - 2 + 1)
@@ -49,26 +43,22 @@ unittest
     assert(1 == uf.groups().length);
 }
 
-// --- dsu ---
+// --- start ---
 
-struct Dsu
-{
+struct Dsu {
 public:
-    this(long n) @safe nothrow
-    {
+    this(long n) @safe nothrow {
         _n = cast(int) n, parent_or_size = new int[](n);
         parent_or_size[] = -1;
     }
 
-    int merge(long a, long b) @safe nothrow @nogc
-    {
+    int merge(long a, long b) @safe nothrow @nogc {
         assert(0 <= a && a < _n);
         assert(0 <= b && b < _n);
         int x = leader(a), y = leader(b);
         if (x == y)
             return x;
-        if (-parent_or_size[x] < -parent_or_size[y])
-        {
+        if (-parent_or_size[x] < -parent_or_size[y]) {
             auto tmp = x;
             x = y;
             y = tmp;
@@ -78,32 +68,27 @@ public:
         return x;
     }
 
-    bool same(long a, long b) @safe nothrow @nogc
-    {
+    bool same(long a, long b) @safe nothrow @nogc {
         assert(0 <= a && a < _n);
         assert(0 <= b && b < _n);
         return leader(a) == leader(b);
     }
 
-    int leader(long a) @safe nothrow @nogc
-    {
+    int leader(long a) @safe nothrow @nogc {
         assert(0 <= a && a < _n);
         if (parent_or_size[a] < 0)
             return cast(int) a;
         return parent_or_size[a] = leader(parent_or_size[a]);
     }
 
-    int size(long a) @safe nothrow @nogc
-    {
+    int size(long a) @safe nothrow @nogc {
         assert(0 <= a && a < _n);
         return -parent_or_size[leader(a)];
     }
 
-    int[][] groups() @safe nothrow
-    {
+    int[][] groups() @safe nothrow {
         auto leader_buf = new int[](_n), group_size = new int[](_n);
-        foreach (i; 0 .. _n)
-        {
+        foreach (i; 0 .. _n) {
             leader_buf[i] = leader(i);
             group_size[leader_buf[i]]++;
         }

@@ -1,7 +1,6 @@
 module acl.internal_math;
 
-unittest
-{
+unittest {
     assert(safeMod(11, 5) == 1);
     assert(safeMod(-11, 5) == 4);
 
@@ -16,40 +15,32 @@ unittest
     assert(primitiveRoot!(7) == 3);
 }
 
-unittest
-{
-    foreach (m; 1 .. 100 + 1)
-    {
+unittest {
+    foreach (m; 1 .. 100 + 1) {
         auto bt = Barrett(m);
         foreach (a; 0 .. m)
-            foreach (b; 0 .. m)
-            {
+            foreach (b; 0 .. m) {
                 assert(a * b % m == bt.mul(a, b));
             }
     }
     assert(0 == Barrett(1).mul(0, 0));
 }
 
-unittest
-{
+unittest {
     immutable int mod_upper = int.max;
-    for (uint mod = mod_upper; mod >= mod_upper - 20; mod--)
-    {
+    for (uint mod = mod_upper; mod >= mod_upper - 20; mod--) {
         auto bt = Barrett(mod);
         uint[] v;
-        foreach (i; 0 .. 10)
-        {
+        foreach (i; 0 .. 10) {
             v ~= i;
             v ~= mod - i;
             v ~= mod / 2 + i;
             v ~= mod / 2 - i;
         }
-        foreach (a; v)
-        {
+        foreach (a; v) {
             immutable long a2 = a;
             assert((a2 * a2) % mod == bt.mul(a, a));
-            foreach (b; v)
-            {
+            foreach (b; v) {
                 immutable long b2 = b;
                 assert((a2 * b2) % mod == bt.mul(a, b));
             }
@@ -57,10 +48,8 @@ unittest
     }
 }
 
-unittest
-{
-    bool isPrimeNaive(long n)
-    {
+unittest {
+    bool isPrimeNaive(long n) {
         assert(0 <= n && n <= int.max);
         if (n == 0 || n == 1)
             return false;
@@ -77,17 +66,14 @@ unittest
     assert(ctIsPrime(1_000_000_009));
     foreach (i; 0 .. 10_000 + 1)
         assert(isPrimeNaive(i) == ctIsPrime(i));
-    foreach (i; 0 .. 10_000 + 1)
-    {
+    foreach (i; 0 .. 10_000 + 1) {
         auto x = int.max - i;
         assert(isPrimeNaive(x) == ctIsPrime(x));
     }
 }
 
-unittest
-{
-    long gcd(long a, long b)
-    {
+unittest {
+    long gcd(long a, long b) {
         assert(0 <= a && 0 <= b);
         if (b == 0)
             return a;
@@ -95,8 +81,7 @@ unittest
     }
 
     long[] pred;
-    foreach (i; 0 .. 10 + 1)
-    {
+    foreach (i; 0 .. 10 + 1) {
         pred ~= i;
         pred ~= -i;
         pred ~= long.min + i;
@@ -118,8 +103,7 @@ unittest
     pred ~= -1_000_000_009;
 
     foreach (a; pred)
-        foreach (b; pred)
-        {
+        foreach (b; pred) {
             if (b <= 0)
                 continue;
             immutable long a2 = safeMod(a, b);
@@ -131,18 +115,15 @@ unittest
         }
 }
 
-unittest
-{
-    foreach (m; 2 .. 10_000 + 1)
-    {
+unittest {
+    foreach (m; 2 .. 10_000 + 1) {
         if (!ctIsPrime(m))
             continue;
         immutable int n = ctPrimitiveRoot(m);
         assert(1 <= n);
         assert(n < m);
         int x = 1;
-        foreach (i; 1 .. m - 2 + 1)
-        {
+        foreach (i; 1 .. m - 2 + 1) {
             x = cast(int)(cast(long) x * n % m);
             assert(1 != x);
         }
@@ -151,14 +132,11 @@ unittest
     }
 }
 
-unittest
-{
-    int[] factors(int m)
-    {
+unittest {
+    int[] factors(int m) {
         int[] result;
         for (int i = 2; cast(long) i * i <= m; i++)
-            if (m % i == 0)
-            {
+            if (m % i == 0) {
                 result ~= i;
                 while (m % i == 0)
                     m /= i;
@@ -168,12 +146,10 @@ unittest
         return result;
     }
 
-    bool isPrimitiveRoot(int m, int g)
-    {
+    bool isPrimitiveRoot(int m, int g) {
         assert(1 <= g && g < m);
         auto prs = factors(m - 1);
-        foreach (x; prs)
-        {
+        foreach (x; prs) {
             if (ctPowMod(g, (m - 1) / x, m) == 1)
                 return false;
         }
@@ -194,8 +170,7 @@ unittest
     assert(isPrimitiveRoot(831_143_041, primitiveRoot!(831_143_041)));
     assert(isPrimitiveRoot(1_685_283_601, primitiveRoot!(1_685_283_601)));
 
-    foreach (i; 0 .. 1000)
-    {
+    foreach (i; 0 .. 1000) {
         immutable int x = int.max - i;
         if (!ctIsPrime(x))
             continue;
@@ -203,14 +178,13 @@ unittest
     }
 }
 
-// --- internal_math ---
+// --- start ---
 
 import std.typecons : Tuple;
 
 /// Return: `x mod m`
 /// Param: `1 <= m`
-ulong safeMod(long x, long m) @safe pure nothrow @nogc
-{
+ulong safeMod(long x, long m) @safe pure nothrow @nogc {
     x %= m;
     if (x < 0)
         x += m;
@@ -218,8 +192,7 @@ ulong safeMod(long x, long m) @safe pure nothrow @nogc
 }
 
 /// Return: `a*b` (128bit width)
-ulong[2] umul128(ulong a, ulong b) @safe @nogc pure nothrow
-{
+ulong[2] umul128(ulong a, ulong b) @safe @nogc pure nothrow {
     immutable ulong au = a >> 32;
     immutable ulong bu = b >> 32;
     immutable ulong al = a & ((1UL << 32) - 1);
@@ -240,29 +213,25 @@ ulong[2] umul128(ulong a, ulong b) @safe @nogc pure nothrow
 /// Fast modular multiplication by barrett reduction
 /// Reference: https://en.wikipedia.org/wiki/Barrett_reduction
 /// NOTE: reconsider after Ice Lake
-struct Barrett
-{
+struct Barrett {
     ///
     uint _m;
     ///
     ulong im;
     /// Param: `1 <= m < 2^31`
-    this(uint m) @safe @nogc pure nothrow
-    {
+    this(uint m) @safe @nogc pure nothrow {
         _m = m;
         im = (cast(ulong)(-1)) / m + 1;
     }
 
     /// Return: `m`
-    uint umod() @safe @nogc pure nothrow
-    {
+    uint umod() @safe @nogc pure nothrow {
         return _m;
     }
 
     /// Param: `0 <= a < m`, `0 <= b < m`
     /// Return: `a * b % m`
-    uint mul(uint a, uint b) @safe @nogc pure nothrow
-    {
+    uint mul(uint a, uint b) @safe @nogc pure nothrow {
         ulong z = a;
         z *= b;
         immutable ulong x = umul128(z, im)[0];
@@ -275,15 +244,13 @@ struct Barrett
 
 /// Param: `0 <= n`, `1 <= m`
 /// Return: `(x ^^ n) % m`
-long ctPowMod(long x, long n, int m) @safe pure nothrow @nogc
-{
+long ctPowMod(long x, long n, int m) @safe pure nothrow @nogc {
     if (m == 1)
         return 0;
     uint _m = cast(uint) m;
     ulong r = 1;
     ulong y = safeMod(x, m);
-    while (n)
-    {
+    while (n) {
         if (n & 1)
             r = (r * y) % _m;
         y = (y * y) % _m;
@@ -296,8 +263,7 @@ long ctPowMod(long x, long n, int m) @safe pure nothrow @nogc
 /// M. Forisek and J. Jancina,
 /// Fast Primality Testing for Integers That Fit into a Machine Word
 /// Param: `0 <= n`
-bool ctIsPrime(int n) @safe pure nothrow @nogc
-{
+bool ctIsPrime(int n) @safe pure nothrow @nogc {
     if (n <= 1)
         return false;
     if (n == 2 || n == 7 || n == 61)
@@ -307,17 +273,14 @@ bool ctIsPrime(int n) @safe pure nothrow @nogc
     long d = n - 1;
     while (d % 2 == 0)
         d /= 2;
-    foreach (a; [2, 7, 61])
-    {
+    foreach (a; [2, 7, 61]) {
         long t = d;
         long y = ctPowMod(a, t, n);
-        while (t != n - 1 && y != 1 && y != n - 1)
-        {
+        while (t != n - 1 && y != 1 && y != n - 1) {
             y = y * y % n;
             t <<= 1;
         }
-        if (y != n - 1 && t % 2 == 0)
-        {
+        if (y != n - 1 && t % 2 == 0) {
             return false;
         }
     }
@@ -329,14 +292,12 @@ enum bool isPrime(int n) = ctIsPrime(n);
 
 /// Param: `1 <= b`
 /// Return: `pair(g, x)` s.t. `g = gcd(a, b)`, `x*a = g (mod b)`, `0 <= x < b/g`
-Tuple!(long, long) invGcd(long a, long b) @safe pure nothrow @nogc
-{
+Tuple!(long, long) invGcd(long a, long b) @safe pure nothrow @nogc {
     a = safeMod(a, b);
     if (a == 0)
         return Tuple!(long, long)(b, 0);
     long s = b, t = a, m0 = 0, m1 = 1;
-    while (t)
-    {
+    while (t) {
         immutable long u = s / t;
         s -= t * u;
         m0 -= m1 * u;
@@ -355,8 +316,7 @@ Tuple!(long, long) invGcd(long a, long b) @safe pure nothrow @nogc
 /// Compile time primitive root
 /// Param: m must be prime
 /// Return: primitive root (and minimum in now)
-int ctPrimitiveRoot(int m) @safe pure nothrow @nogc
-{
+int ctPrimitiveRoot(int m) @safe pure nothrow @nogc {
     if (m == 2)
         return 1;
     if (m == 167_772_161)
@@ -374,20 +334,17 @@ int ctPrimitiveRoot(int m) @safe pure nothrow @nogc
     while (x % 2 == 0)
         x /= 2;
     for (int i = 3; (cast(long) i) * i <= x; i += 2)
-        if (x % i == 0)
-        {
+        if (x % i == 0) {
             divs[cnt++] = i;
             while (x % i == 0)
                 x /= i;
         }
     if (x > 1)
         divs[cnt++] = x;
-    for (int g = 2;; g++)
-    {
+    for (int g = 2;; g++) {
         bool ok = true;
         foreach (i; 0 .. cnt)
-            if (ctPowMod(g, (m - 1) / divs[i], m) == 1)
-            {
+            if (ctPowMod(g, (m - 1) / divs[i], m) == 1) {
                 ok = false;
                 break;
             }

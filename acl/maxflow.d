@@ -185,7 +185,6 @@ unittest {
     }
 }
 
-// --- maxflow ---
 // --- start ---
 
 struct MFGraph(Cap) {

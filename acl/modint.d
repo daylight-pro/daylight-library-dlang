@@ -1,9 +1,11 @@
 module acl.modint;
 
+// --- start ---
 import acl.internal_math;
 
-unittest
-{
+// --- end ---
+
+unittest {
     alias mint = StaticModInt!(11);
 
     mint a = 10;
@@ -51,8 +53,7 @@ unittest
     assert(mint.raw(3) == 3);
 }
 
-unittest
-{
+unittest {
     alias mint = modint;
 
     mint.setMod(11);
@@ -105,26 +106,21 @@ unittest
 static assert(modint998244353.mod() == 998_244_353);
 static assert(modint1000000007.mod() == 1_000_000_007);
 
-unittest
-{
+unittest {
     alias mint = modint;
     immutable mod_upper = int.max;
-    for (uint mod = mod_upper; mod >= mod_upper - 20; mod--)
-    {
+    for (uint mod = mod_upper; mod >= mod_upper - 20; mod--) {
         mint.setMod(mod);
         long[] v;
-        foreach (i; 0 .. 10)
-        {
+        foreach (i; 0 .. 10) {
             v ~= i;
             v ~= mod - i;
             v ~= mod / 2 + i;
             v ~= mod / 2 - i;
         }
-        foreach (a; v)
-        {
+        foreach (a; v) {
             assert((((a * a) % mod) * a) % mod == (mint(a).pow(3)).val());
-            foreach (b; v)
-            {
+            foreach (b; v) {
                 assert((a + b) % mod == (mint(a) + mint(b)).val());
                 assert((a - b + mod) % mod == (mint(a) - mint(b)).val());
                 assert((a * b) % mod == (mint(a) * mint(b)).val());
@@ -133,8 +129,7 @@ unittest
     }
 }
 
-unittest
-{
+unittest {
     modint.setMod(998_244_353);
     assert(modint.mod() - 1 != modint(cast(ulong)(-1)).val());
     assert(0 != (cast(ulong)(-1) + modint(1)).val());
@@ -143,8 +138,7 @@ unittest
     assert(0 != (cast(ulong)(-1) + mint(1)).val());
 }
 
-unittest
-{
+unittest {
     modint.setMod(1);
     foreach (i; 0 .. 100)
         foreach (j; 0 .. 100)
@@ -166,29 +160,24 @@ unittest
     assert(mint(true).val() == 0);
 }
 
-unittest
-{
+unittest {
     import std.numeric : gcd;
 
-    foreach (i; 1 .. 10)
-    {
+    foreach (i; 1 .. 10) {
         int x = StaticModInt!(11)(i).inv().val();
         assert(1 == (x * i) % 11);
     }
-    foreach (i; 1 .. 11)
-    {
+    foreach (i; 1 .. 11) {
         if (gcd(i, 12) != 1)
             continue;
         int x = StaticModInt!(12)(i).inv().val();
         assert(1 == (x * i) % 12);
     }
-    foreach (i; 1 .. 100_000)
-    {
+    foreach (i; 1 .. 100_000) {
         int x = StaticModInt!(1_000_000_007)(i).inv().val();
         assert(1 == (cast(long)(x) * i) % 1_000_000_007);
     }
-    foreach (i; 1 .. 100_000)
-    {
+    foreach (i; 1 .. 100_000) {
         if (gcd(i, 1_000_000_008) != 1)
             continue;
         int x = StaticModInt!(1_000_000_008)(i).inv().val();
@@ -196,8 +185,7 @@ unittest
     }
 
     modint.setMod(998_244_353);
-    foreach (i; 1 .. 100_000)
-    {
+    foreach (i; 1 .. 100_000) {
         int x = modint(i).inv().val();
         assert(0 <= x);
         assert(x <= 998_244_353 - 1);
@@ -205,8 +193,7 @@ unittest
     }
 
     modint.setMod(1_000_000_008);
-    foreach (i; 1 .. 100_000)
-    {
+    foreach (i; 1 .. 100_000) {
         if (gcd(i, 1_000_000_008) != 1)
             continue;
         int x = modint(i).inv().val();
@@ -214,8 +201,7 @@ unittest
     }
 }
 
-unittest
-{
+unittest {
     alias sint = StaticModInt!(11);
     const sint a = 9;
     assert(9 == a.val());
@@ -225,8 +211,7 @@ unittest
     assert(9 == b.val());
 }
 
-unittest
-{
+unittest {
     alias sint = StaticModInt!11;
     sint a;
     a = 8;
@@ -253,8 +238,7 @@ unittest
     assert(10 == a.val());
 }
 
-unittest
-{
+unittest {
     alias dint = modint;
     dint.setMod(11);
     dint a;
@@ -282,8 +266,7 @@ unittest
     assert(10 == a.val());
 }
 
-unittest
-{
+unittest {
     import std.exception;
 
     alias mint = StaticModInt!(11);
@@ -297,8 +280,7 @@ unittest
     assertThrown!Error(mint(3).pow(-1));
 }
 
-unittest
-{
+unittest {
     import std.exception;
 
     assert(998_244_353 == DynamicModInt!(12_345).mod());
@@ -327,8 +309,7 @@ unittest
     assertThrown!Error(mint(3).pow(-1));
 }
 
-unittest
-{
+unittest {
     modint.setMod(11);
     alias mint = modint;
     assert(1 == mint(true).val());
@@ -355,8 +336,7 @@ unittest
     assert(0 == m.val());
 }
 
-unittest
-{
+unittest {
     alias mint = StaticModInt!(11);
     assert(1 == mint(true).val());
     assert(3 == mint(cast(char) 3).val());
@@ -382,118 +362,100 @@ unittest
     assert(0 == m.val());
 }
 
-// --- modint ---
+// --- start ---
 
-struct StaticModInt(int m) if (1 <= m)
-{
+struct StaticModInt(int m) if (1 <= m) {
     import std.traits : isSigned, isUnsigned, isSomeChar;
 
     alias mint = StaticModInt;
 public:
-    static int mod()
-    {
+    static int mod() {
         return m;
     }
 
-    static mint raw(int v)
-    {
+    static mint raw(int v) {
         mint x;
         x._v = v;
         return x;
     }
 
-    this(T)(T v) if (isSigned!T)
-    {
+    this(T)(T v) if (isSigned!T) {
         long x = cast(long)(v % cast(long)(umod()));
         if (x < 0)
             x += umod();
         _v = cast(uint)(x);
     }
 
-    this(T)(T v) if (isUnsigned!T || isSomeChar!T)
-    {
+    this(T)(T v) if (isUnsigned!T || isSomeChar!T) {
         _v = cast(uint)(v % umod());
     }
 
-    this(bool v)
-    {
+    this(bool v) {
         _v = cast(uint)(v) % umod();
     }
 
     auto opAssign(T)(T v)
-            if (isSigned!T || isUnsigned!T || isSomeChar!T || is(T == bool))
-    {
+            if (isSigned!T || isUnsigned!T || isSomeChar!T || is(T == bool)) {
         return this = mint(v);
     }
 
-    inout uint val() pure
-    {
+    inout uint val() pure {
         return _v;
     }
 
-    ref mint opUnary(string op)() pure nothrow @safe if (op == "++")
-    {
+    ref mint opUnary(string op)() pure nothrow @safe if (op == "++") {
         _v++;
         if (_v == umod())
             _v = 0;
         return this;
     }
 
-    ref mint opUnary(string op)() pure nothrow @safe if (op == "--")
-    {
+    ref mint opUnary(string op)() pure nothrow @safe if (op == "--") {
         if (_v == 0)
             _v = umod();
         _v--;
         return this;
     }
 
-    mint opUnary(string op)() if (op == "+" || op == "-")
-    {
+    mint opUnary(string op)() if (op == "+" || op == "-") {
         mint x;
         return mixin("x " ~ op ~ " this");
     }
 
-    ref mint opOpAssign(string op, T)(T value) if (!is(T == mint))
-    {
+    ref mint opOpAssign(string op, T)(T value) if (!is(T == mint)) {
         mint y = value;
         return opOpAssign!(op)(y);
     }
 
-    ref mint opOpAssign(string op, T)(T value) if (op == "+" && is(T == mint))
-    {
+    ref mint opOpAssign(string op, T)(T value) if (op == "+" && is(T == mint)) {
         _v += value._v;
         if (_v >= umod())
             _v -= umod();
         return this;
     }
 
-    ref mint opOpAssign(string op, T)(T value) if (op == "-" && is(T == mint))
-    {
+    ref mint opOpAssign(string op, T)(T value) if (op == "-" && is(T == mint)) {
         _v -= value._v;
         if (_v >= umod())
             _v += umod();
         return this;
     }
 
-    ref mint opOpAssign(string op, T)(T value) if (op == "*" && is(T == mint))
-    {
+    ref mint opOpAssign(string op, T)(T value) if (op == "*" && is(T == mint)) {
         ulong z = _v;
         z *= value._v;
         _v = cast(uint)(z % umod());
         return this;
     }
 
-    ref mint opOpAssign(string op, T)(T value) if (op == "/" && is(T == mint))
-    {
+    ref mint opOpAssign(string op, T)(T value) if (op == "/" && is(T == mint)) {
         return this = this * value.inv();
     }
 
-    mint pow(long n) const pure
-    {
+    mint pow(long n) const pure {
         assert(0 <= n);
         mint x = this, r = 1;
-        while (n)
-        {
+        while (n) {
             if (n & 1)
                 r *= x;
             x *= x;
@@ -502,51 +464,38 @@ public:
         return r;
     }
 
-    mint inv() const pure
-    {
-        static if (prime)
-        {
+    mint inv() const pure {
+        static if (prime) {
             assert(_v);
             return pow(umod() - 2);
-        }
-        else
-        {
+        } else {
             auto eg = invGcd(_v, mod());
             assert(eg[0] == 1);
             return mint(eg[1]);
         }
     }
 
-    mint opBinary(string op, R)(const R value) const pure 
-            if (op == "+" || op == "-" || op == "*" || op == "/")
-    {
-        static if (is(R == mint))
-        {
+    mint opBinary(string op, R)(const R value) const pure
+    if (op == "+" || op == "-" || op == "*" || op == "/") {
+        static if (is(R == mint)) {
             mint x;
             x += this;
             return x.opOpAssign!(op)(value);
-        }
-        else
-        {
+        } else {
             mint y = value;
             return opOpAssign!(op)(y);
         }
     }
 
-    mint opBinaryRight(string op, L)(const L value) const if (!is(L == mint))
-    {
+    mint opBinaryRight(string op, L)(const L value) const if (!is(L == mint)) {
         mint y = value;
         return y.opBinary!(op)(this);
     }
 
-    bool opEquals(R)(const R value) const
-    {
-        static if (is(R == mint))
-        {
+    bool opEquals(R)(const R value) const {
+        static if (is(R == mint)) {
             return _v == value._v;
-        }
-        else
-        {
+        } else {
             mint y = mint(value);
             return this == y;
         }
@@ -554,128 +503,108 @@ public:
 
 private:
     uint _v;
-    uint umod() pure const
-    {
+    uint umod() pure const {
         return m;
     }
 
     enum bool prime = isPrime!(m);
 }
 
-struct DynamicModInt(int id)
-{
+struct DynamicModInt(int id) {
     import std.traits : isSigned, isUnsigned, isSomeChar;
 
     alias mint = DynamicModInt;
 public:
-    static int mod()
-    {
+    static int mod() {
         return bt.umod();
     }
 
-    static void setMod(int m)
-    {
+    static void setMod(int m) {
         assert(1 <= m);
         bt = Barrett(m);
     }
 
-    static mint raw(int v)
-    {
+    static mint raw(int v) {
         mint x;
         x._v = v;
         return x;
     }
 
-    this(T)(T v) if (isSigned!T)
-    {
+    this(T)(T v) if (isSigned!T) {
         long x = cast(long)(v % cast(long)(umod()));
         if (x < 0)
             x += umod();
         _v = cast(uint)(x);
     }
 
-    this(T)(T v) if (isUnsigned!T || isSomeChar!T)
-    {
+    this(T)(T v) if (isUnsigned!T || isSomeChar!T) {
         _v = cast(uint)(v % umod());
     }
 
-    this(bool v)
-    {
+    this(bool v) {
         _v = cast(uint)(v) % umod();
     }
 
     auto opAssign(T)(T v)
-            if (isSigned!T || isUnsigned!T || isSomeChar!T || is(T == bool))
-    {
+            if (isSigned!T || isUnsigned!T || isSomeChar!T || is(T == bool)) {
         return this = mint(v);
     }
 
-    inout uint val()
-    {
+    inout uint val() {
         return _v;
     }
 
-    ref mint opUnary(string op)() nothrow @safe if (op == "++")
-    {
+    ref mint opUnary(string op)() nothrow @safe if (op == "++") {
         _v++;
         if (_v == umod())
             _v = 0;
         return this;
     }
 
-    ref mint opUnary(string op)() nothrow @safe if (op == "--")
-    {
+    ref mint opUnary(string op)() nothrow @safe if (op == "--") {
         if (_v == 0)
             _v = umod();
         _v--;
         return this;
     }
 
-    mint opUnary(string op)() if (op == "+" || op == "-")
-    {
+    mint opUnary(string op)() if (op == "+" || op == "-") {
         mint x;
         return mixin("x " ~ op ~ " this");
     }
 
-    ref mint opOpAssign(string op, T)(T value) if (!is(T == mint))
-    {
+    ref mint opOpAssign(string op, T)(T value) if (!is(T == mint)) {
         mint y = value;
         return opOpAssign!(op)(y);
     }
 
-    ref mint opOpAssign(string op, T)(T value) if (op == "+" && is(T == mint))
-    {
+    ref mint opOpAssign(string op, T)(T value) if (op == "+" && is(T == mint)) {
         _v += value._v;
         if (_v >= umod())
             _v -= umod();
         return this;
     }
 
-    ref mint opOpAssign(string op, T)(T value) if (op == "-" && is(T == mint))
-    {
+    ref mint opOpAssign(string op, T)(T value) if (op == "-" && is(T == mint)) {
         _v -= value._v;
         if (_v >= umod())
             _v += umod();
         return this;
     }
 
-    ref mint opOpAssign(string op, T)(T value) if (op == "*" && is(T == mint))
-    {
+    ref mint opOpAssign(string op, T)(T value) if (op == "*" && is(T == mint)) {
         _v = bt.mul(_v, value._v);
         return this;
     }
 
-    ref mint opOpAssign(string op, T)(T value) if (op == "/" && is(T == mint))
-    {
+    ref mint opOpAssign(string op, T)(T value) if (op == "/" && is(T == mint)) {
         return this = this * value.inv();
     }
 
-    mint pow(long n) const
-    {
+    mint pow(long n) const {
         assert(0 <= n);
         mint x = this, r = 1;
-        while (n)
-        {
+        while (n) {
             if (n & 1)
                 r *= x;
             x *= x;
@@ -684,43 +613,33 @@ public:
         return r;
     }
 
-    mint inv() const
-    {
+    mint inv() const {
         auto eg = invGcd(_v, mod());
         assert(eg[0] == 1);
         return mint(eg[1]);
     }
 
     mint opBinary(string op, R)(const R value)
-            if (op == "+" || op == "-" || op == "*" || op == "/")
-    {
-        static if (is(R == mint))
-        {
+            if (op == "+" || op == "-" || op == "*" || op == "/") {
+        static if (is(R == mint)) {
             mint x;
             x += this;
             return x.opOpAssign!(op)(value);
-        }
-        else
-        {
+        } else {
             mint y = value;
             return opOpAssign!(op)(y);
         }
     }
 
-    mint opBinaryRight(string op, L)(const L value) const if (!is(L == mint))
-    {
+    mint opBinaryRight(string op, L)(const L value) const if (!is(L == mint)) {
         mint y = value;
         return y.opBinary!(op)(this);
     }
 
-    bool opEquals(R)(const R value) const
-    {
-        static if (is(R == mint))
-        {
+    bool opEquals(R)(const R value) const {
+        static if (is(R == mint)) {
             return _v == value._v;
-        }
-        else
-        {
+        } else {
             mint y = mint(value);
             return this == y;
         }
@@ -729,8 +648,7 @@ public:
 private:
     uint _v;
     static Barrett bt = Barrett(998_244_353);
-    uint umod()
-    {
+    uint umod() {
         return bt.umod();
     }
 }

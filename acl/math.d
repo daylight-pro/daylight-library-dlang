@@ -1,24 +1,24 @@
 module acl.math;
+// --- start ---
 import acl.internal_math;
 
-unittest
-{
+// --- end ---
+
+unittest {
     assert(powMod(12_345_678, 87_654_321, 1_000_000_007) == 904_406_885);
 
     assert(invMod(7, 1_000_000_007) == 142_857_144);
 
     immutable crt_result = crt([80_712, 320_302, 140_367], [
             221_549, 699_312, 496_729
-            ]);
+        ]);
     assert(crt_result == Tuple!(long, long)(38_774_484_298_448_350, 76_959_154_983_203_952));
 
     assert(floorSum(31_415, 92_653, 58_979, 32_384) == 314_095_480);
 }
 
-unittest
-{
-    ulong naive(long x, long n, int mod)
-    {
+unittest {
+    ulong naive(long x, long n, int mod) {
         long y = safeMod(x, mod);
         ulong z = 1 % mod;
         foreach (i; 0 .. n)
@@ -32,21 +32,18 @@ unittest
                 assert(naive(a, b, c) == powMod(a, b, c));
 }
 
-unittest
-{
+unittest {
     assert(invMod(-1, long.max) == invMod(long.min, long.max));
     assert(1 == invMod(long.max, long.max - 1));
     assert(long.max - 1 == invMod(long.max - 1, long.max));
     assert(2 == invMod(long.max / 2 + 1, long.max));
 }
 
-unittest
-{
+unittest {
     import std.numeric : gcd;
 
     foreach (a; -100 .. 100 + 1)
-        foreach (b; 1 .. 1000 + 1)
-        {
+        foreach (b; 1 .. 1000 + 1) {
             if (gcd(safeMod(a, b), b) != 1)
                 continue;
             long c = invMod(a, b);
@@ -56,11 +53,9 @@ unittest
         }
 }
 
-unittest
-{
+unittest {
     assert(0 == invMod(0, 1));
-    foreach (i; 0 .. 10)
-    {
+    foreach (i; 0 .. 10) {
         assert(0 == invMod(i, 1));
         assert(0 == invMod(-i, 1));
         assert(0 == invMod(long.min + i, 1));
@@ -68,10 +63,8 @@ unittest
     }
 }
 
-unittest
-{
-    long floorSum_naive(long n, long m, long a, long b)
-    {
+unittest {
+    long floorSum_naive(long n, long m, long a, long b) {
         long sum = 0;
         foreach (i; 0 .. n)
             sum += (a * i + b) / m;
@@ -81,31 +74,26 @@ unittest
     foreach (n; 0 .. 20)
         foreach (m; 1 .. 20)
             foreach (a; 0 .. 20)
-                foreach (b; 0 .. 20)
-                {
+                foreach (b; 0 .. 20) {
                     assert(floorSum_naive(n, m, a, b) == floorSum(n, m, a, b));
                 }
 }
 
-unittest
-{
+unittest {
     auto res = crt([1, 2, 1], [2, 3, 2]);
     assert(5 == res[0]);
     assert(6 == res[1]);
 }
 
-unittest
-{
+unittest {
     import std.numeric : gcd;
 
     foreach (a; 1 .. 20 + 1)
         foreach (b; 1 .. 20 + 1)
             foreach (c; -10 .. 10 + 1)
-                foreach (d; -10 .. 10 + 1)
-                {
+                foreach (d; -10 .. 10 + 1) {
                     auto res = crt([c, d], [a, b]);
-                    if (res[1] == 0)
-                    {
+                    if (res[1] == 0) {
                         for (int x = 0; x < a * b / gcd(a, b); x++)
                             assert(x % a != c || x % b != d);
                         continue;
@@ -116,8 +104,7 @@ unittest
                 }
 }
 
-unittest
-{
+unittest {
     import std.numeric : gcd;
 
     foreach (a; 1 .. 5 + 1)
@@ -125,13 +112,11 @@ unittest
             foreach (c; 1 .. 5 + 1)
                 foreach (d; -5 .. 5 + 1)
                     foreach (e; -5 .. 5 + 1)
-                        foreach (f; -5 .. 5 + 1)
-                        {
+                        foreach (f; -5 .. 5 + 1) {
                             auto res = crt([d, e, f], [a, b, c]);
                             long lcm = a * b / gcd(a, b);
                             lcm = lcm * c / gcd(lcm, c);
-                            if (res[1] == 0)
-                            {
+                            if (res[1] == 0) {
                                 foreach (x; 0 .. lcm)
                                     assert(x % a != d || x % b != e || x % c != f);
                                 continue;
@@ -143,8 +128,7 @@ unittest
                         }
 }
 
-unittest
-{
+unittest {
     long r0 = 0;
     long r1 = 1_000_000_000_000L - 2;
     long m0 = 900577;
@@ -155,15 +139,13 @@ unittest
     assert(r1 == res[0] % m1);
 }
 
-unittest
-{
+unittest {
     import std.algorithm;
     import std.numeric;
 
     immutable INF = long.max;
     long[] pred;
-    foreach (i; 1 .. 10 + 1)
-    {
+    foreach (i; 1 .. 10 + 1) {
         pred ~= i;
         pred ~= INF - (i - 1);
     }
@@ -175,14 +157,11 @@ unittest
     foreach (ab; [
             T(INF, INF), T(1, INF), T(INF, 1), T(7, INF), T(INF / 337, 337),
             T(2, (INF - 1) / 2)
-        ])
-    {
+        ]) {
         long a = ab[0];
         long b = ab[1];
-        foreach (ph; 0 .. 2)
-        {
-            foreach (ans; pred)
-            {
+        foreach (ph; 0 .. 2) {
+            foreach (ans; pred) {
                 auto res = crt([ans % a, ans % b], [a, b]);
                 long lcm = a / gcd(a, b) * b;
                 assert(lcm == res[1]);
@@ -193,13 +172,10 @@ unittest
     }
 
     long[] factor_inf = [49, 73, 127, 337, 92_737, 649_657];
-    do
-    {
-        foreach (ans; pred)
-        {
+    do {
+        foreach (ans; pred) {
             long[] r, m;
-            foreach (f; factor_inf)
-            {
+            foreach (f; factor_inf) {
                 r ~= ans % f;
                 m ~= f;
             }
@@ -211,13 +187,10 @@ unittest
     while (nextPermutation(factor_inf));
 
     long[] factor_infn1 = [2, 3, 715_827_883, 2_147_483_647];
-    do
-    {
-        foreach (ans; pred)
-        {
+    do {
+        foreach (ans; pred) {
             long[] r, m;
-            foreach (f; factor_infn1)
-            {
+            foreach (f; factor_infn1) {
                 r ~= ans % f;
                 m ~= f;
             }
@@ -229,19 +202,17 @@ unittest
     while (nextPermutation(factor_infn1));
 }
 
-// --- math ---
+// --- start ---
 
 import std.typecons : Tuple;
 
-long powMod(long x, long n, long m) @safe pure nothrow @nogc
-{
+long powMod(long x, long n, long m) @safe pure nothrow @nogc {
     assert(0 <= n && 1 <= m);
     if (m == 1)
         return 0;
     Barrett bt = Barrett(cast(uint) m);
     uint r = 1, y = cast(uint) safeMod(x, m);
-    while (n)
-    {
+    while (n) {
         if (n & 1)
             r = bt.mul(r, y);
         y = bt.mul(y, y);
@@ -250,25 +221,21 @@ long powMod(long x, long n, long m) @safe pure nothrow @nogc
     return r;
 }
 
-long invMod(long x, long m) @safe pure nothrow @nogc
-{
+long invMod(long x, long m) @safe pure nothrow @nogc {
     assert(1 <= m);
     auto z = invGcd(x, m);
     assert(z[0] == 1);
     return z[1];
 }
 
-Tuple!(long, long) crt(long[] r, long[] m) @safe pure nothrow @nogc
-{
+Tuple!(long, long) crt(long[] r, long[] m) @safe pure nothrow @nogc {
     assert(r.length == m.length);
     long r0 = 0, m0 = 1;
-    foreach (i; 0 .. r.length)
-    {
+    foreach (i; 0 .. r.length) {
         assert(1 <= m[i]);
         long r1 = safeMod(r[i], m[i]);
         long m1 = m[i];
-        if (m0 < m1)
-        {
+        if (m0 < m1) {
             auto tmp = r0;
             r0 = r1;
             r1 = tmp;
@@ -276,8 +243,7 @@ Tuple!(long, long) crt(long[] r, long[] m) @safe pure nothrow @nogc
             m0 = m1;
             m1 = tmp;
         }
-        if (m0 % m1 == 0)
-        {
+        if (m0 % m1 == 0) {
             if (r0 % m1 != r1)
                 return Tuple!(long, long)(0, 0);
             continue;
@@ -300,16 +266,13 @@ Tuple!(long, long) crt(long[] r, long[] m) @safe pure nothrow @nogc
     return Tuple!(long, long)(r0, m0);
 }
 
-long floorSum(long n, long m, long a, long b) @safe pure nothrow @nogc
-{
+long floorSum(long n, long m, long a, long b) @safe pure nothrow @nogc {
     long ans;
-    if (m <= a)
-    {
+    if (m <= a) {
         ans += (n - 1) * n * (a / m) / 2;
         a %= m;
     }
-    if (m <= b)
-    {
+    if (m <= b) {
         ans += n * (b / m);
         b %= m;
     }

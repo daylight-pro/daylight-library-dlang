@@ -1,13 +1,11 @@
 module acl.mincostflow;
 
-unittest
-{
+unittest {
     MCFGraph!(int, int) g1;
     auto g2 = MCFGraph!(int, int)(0);
 }
 
-unittest
-{
+unittest {
     import std.typecons : Tuple;
 
     auto g = MCFGraph!(int, int)(4);
@@ -26,9 +24,9 @@ unittest
     assert(MCFGraph!(int, int).Edge(1, 2, 1, 0, 1) == g.getEdge(4));
 }
 
-unittest
-{
+unittest {
     import std.typecons : Tuple;
+
     {
         auto g = MCFGraph!(int, int)(2);
         g.addEdge(0, 1, 1, 2);
@@ -42,14 +40,12 @@ unittest
     }
 }
 
-unittest
-{
+unittest {
     MCFGraph!(int, int) g;
     g = MCFGraph!(int, int)(10);
 }
 
-unittest
-{
+unittest {
     import std.exception : assertThrown;
 
     auto g = MCFGraph!(int, int)(10);
@@ -57,8 +53,7 @@ unittest
     assertThrown!Error(g.slope(3, 3));
 }
 
-unittest
-{
+unittest {
     import std.typecons : Tuple;
 
     auto g = MCFGraph!(int, int)(3);
@@ -69,8 +64,7 @@ unittest
     assert(expected == g.slope(0, 2));
 }
 
-unittest
-{
+unittest {
     import std.exception : assertThrown;
 
     auto g = MCFGraph!(int, int)(2);
@@ -78,21 +72,18 @@ unittest
     assertThrown!Error(g.addEdge(0, 0, 0, -1));
 }
 
-// --- mincostflow ---
+// --- start ---
 
-struct MCFGraph(Cap, Cost)
-{
+struct MCFGraph(Cap, Cost) {
     import std.typecons : Tuple;
 
 public:
-    this(int n)
-    {
+    this(int n) {
         _n = n;
         g = new _edge[][](n);
     }
 
-    int addEdge(int from, int to, Cap cap, Cost cost)
-    {
+    int addEdge(int from, int to, Cap cap, Cost cost) {
         assert(0 <= from && from < _n);
         assert(0 <= to && to < _n);
         assert(0 <= cap);
@@ -110,15 +101,13 @@ public:
         return m;
     }
 
-    struct Edge
-    {
+    struct Edge {
         int from, to;
         Cap cap, flow;
         Cost cost;
     }
 
-    Edge getEdge(int i)
-    {
+    Edge getEdge(int i) {
         int m = cast(int) pos.length;
         assert(0 <= i && i < m);
         auto _e = g[pos[i][0]][pos[i][1]];
@@ -126,8 +115,7 @@ public:
         return Edge(pos[i][0], _e.to, _e.cap + _re.cap, _re.cap, _e.cost);
     }
 
-    Edge[] edges()
-    {
+    Edge[] edges() {
         int m = cast(int) pos.length;
         auto result = new Edge[](m);
         foreach (i; 0 .. m)
@@ -135,23 +123,19 @@ public:
         return result;
     }
 
-    Tuple!(Cap, Cost) flow(int s, int t)
-    {
+    Tuple!(Cap, Cost) flow(int s, int t) {
         return flow(s, t, Cap.max);
     }
 
-    Tuple!(Cap, Cost) flow(int s, int t, Cap flow_limit)
-    {
+    Tuple!(Cap, Cost) flow(int s, int t, Cap flow_limit) {
         return slope(s, t, flow_limit)[$ - 1];
     }
 
-    Tuple!(Cap, Cost)[] slope(int s, int t)
-    {
+    Tuple!(Cap, Cost)[] slope(int s, int t) {
         return slope(s, t, Cap.max);
     }
 
-    Tuple!(Cap, Cost)[] slope(int s, int t, Cap flow_limit)
-    {
+    Tuple!(Cap, Cost)[] slope(int s, int t, Cap flow_limit) {
         import std.container : Array, BinaryHeap;
         import std.algorithm : min;
 
@@ -163,18 +147,15 @@ public:
         auto pv = new int[](_n);
         auto pe = new int[](_n);
         auto vis = new bool[](_n);
-        bool dualRef()
-        {
+        bool dualRef() {
             dist[] = Cost.max;
             pv[] = -1;
             pe[] = -1;
             vis[] = false;
-            struct Q
-            {
+            struct Q {
                 Cost key;
                 int to;
-                int opCmp(const Q other) const
-                {
+                int opCmp(const Q other) const {
                     if (key == other.key)
                         return 0;
                     return key > other.key ? -1 : 1;
@@ -184,8 +165,7 @@ public:
             BinaryHeap!(Array!Q) que;
             dist[s] = 0;
             que.insert(Q(0, s));
-            while (!que.empty)
-            {
+            while (!que.empty) {
                 int v = que.front.to;
                 que.removeFront();
                 if (vis[v])
@@ -193,14 +173,12 @@ public:
                 vis[v] = true;
                 if (v == t)
                     break;
-                foreach (i; 0 .. cast(int) g[v].length)
-                {
+                foreach (i; 0 .. cast(int) g[v].length) {
                     auto e = g[v][i];
                     if (vis[e.to] || !e.cap)
                         continue;
                     Cost cost = e.cost - dual[e.to] + dual[v];
-                    if (dist[e.to] - dist[v] > cost)
-                    {
+                    if (dist[e.to] - dist[v] > cost) {
                         dist[e.to] = dist[v] + cost;
                         pv[e.to] = v;
                         pe[e.to] = i;
@@ -210,8 +188,7 @@ public:
             }
             if (!vis[t])
                 return false;
-            foreach (v; 0 .. _n)
-            {
+            foreach (v; 0 .. _n) {
                 if (!vis[v])
                     continue;
                 dual[v] -= dist[t] - dist[v];
@@ -223,15 +200,13 @@ public:
         Cost cost = 0, prev_cost_per_flow = -1;
         Tuple!(Cap, Cost)[] result;
         result ~= Tuple!(Cap, Cost)(flow, cost);
-        while (flow < flow_limit)
-        {
+        while (flow < flow_limit) {
             if (!dualRef())
                 break;
             Cap c = flow_limit - flow;
             for (int v = t; v != s; v = pv[v])
                 c = min(c, g[pv[v]][pe[v]].cap);
-            for (int v = t; v != s; v = pv[v])
-            {
+            for (int v = t; v != s; v = pv[v]) {
                 g[pv[v]][pe[v]].cap -= c;
                 g[v][g[pv[v]][pe[v]].rev].cap += c;
             }
@@ -248,8 +223,7 @@ public:
 
 private:
     int _n;
-    struct _edge
-    {
+    struct _edge {
         int to, rev;
         Cap cap;
         Cost cost;
