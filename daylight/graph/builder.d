@@ -109,7 +109,7 @@ class GraphBuilder(T = long) {
                     reader.read(c);
                 }
                 G[u][v] = c;
-                if (m_directed) {
+                if (!m_directed) {
                     G[v][u] = c;
                 }
             }
