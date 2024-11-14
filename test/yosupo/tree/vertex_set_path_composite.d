@@ -59,7 +59,7 @@ void main() {
             foreach (t; hld.path_query(u, v)) {
                 int l, r;
                 bool rev;
-                AliasSeqOf!(l, r, rev)(t);
+                AliasSeq!(l, r, rev) = t;
                 if (rev) {
                     auto s = seg2.prod(l, r);
                     x = s[0] * x + s[1];
