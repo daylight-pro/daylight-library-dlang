@@ -48,11 +48,5 @@ ref auto chmax(T)(ref T a, T b) {
     return a;
 }
 
-template bind(names...) {
-    auto bind(T)(T t) {
-        return tuple!(aliasSeqOf!(tuple(names)))(t.expand);
-    }
-}
-
 public const int INF = 1 << 30;
 public const long LINF = 2e18.to!long;
