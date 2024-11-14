@@ -1,5 +1,7 @@
 module daylight.graph.floyd;
 
+// --- start ---
+
 import daylight.base;
 
 long[][] floyd(long[][] WF) {
