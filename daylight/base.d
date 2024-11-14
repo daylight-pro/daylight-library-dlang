@@ -22,7 +22,11 @@ class Reader {
         if (buf.empty) {
             readNext();
         }
-        static if (isArray!(T)) {
+        static if (is(T == char[])) {
+            string token = buf.front();
+            t = token.dup;
+            buf.removeFront();
+        } else static if (isArray!(T)) {
             foreach (ref v; t) {
                 read(v);
             }
