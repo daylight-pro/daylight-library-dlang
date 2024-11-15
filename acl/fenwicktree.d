@@ -1,7 +1,6 @@
 module acl.fenwicktree;
 
-unittest
-{
+unittest {
     auto ft = FenwickTree!long(100);
     ft.add(0, 1);
     ft.add(4, 10);
@@ -9,8 +8,7 @@ unittest
     assert(ft.sum(2, 8) == 10);
 }
 
-unittest
-{
+unittest {
     import acl.modint;
 
     FenwickTree!(long) fw_ll;
@@ -20,14 +18,12 @@ unittest
     assert(0 == fw_modint.sum(0, 0).val());
 }
 
-unittest
-{
+unittest {
     FenwickTree!long fw;
     fw = FenwickTree!long(10);
 }
 
-unittest
-{
+unittest {
     import acl.modint;
 
     auto fw_ll = FenwickTree!long(0);
@@ -37,14 +33,12 @@ unittest
     assert(0 == fw_modint.sum(0, 0).val());
 }
 
-unittest
-{
+unittest {
     auto fw = FenwickTree!ulong(10);
     foreach (i; 0 .. 10)
         fw.add(i, (1UL << 63) + i);
     foreach (i; 0 .. 10 + 1)
-        foreach (j; i .. 10 + 1)
-        {
+        foreach (j; i .. 10 + 1) {
             ulong sum;
             foreach (k; i .. j)
                 sum += k;
@@ -52,16 +46,13 @@ unittest
         }
 }
 
-unittest
-{
-    foreach (n; 0 .. 50 + 1)
-    {
+unittest {
+    foreach (n; 0 .. 50 + 1) {
         auto fw = FenwickTree!long(n);
         foreach (i; 0 .. n)
             fw.add(i, i * i);
         foreach (l; 0 .. n + 1)
-            foreach (r; l .. n + 1)
-            {
+            foreach (r; l .. n + 1) {
                 long sum = 0;
                 foreach (i; l .. r)
                     sum += i * i;
@@ -70,18 +61,15 @@ unittest
     }
 }
 
-unittest
-{
+unittest {
     import acl.modint;
 
-    foreach (n; 0 .. 50 + 1)
-    {
+    foreach (n; 0 .. 50 + 1) {
         auto fw = FenwickTree!(StaticModInt!11)(n);
         foreach (i; 0 .. n)
             fw.add(i, StaticModInt!11(i * i));
         foreach (l; 0 .. n + 1)
-            foreach (r; l .. n + 1)
-            {
+            foreach (r; l .. n + 1) {
                 StaticModInt!11 sum = 0;
                 foreach (i; l .. r)
                     sum += i * i;
@@ -90,20 +78,17 @@ unittest
     }
 }
 
-unittest
-{
+unittest {
     import acl.modint;
 
     modint.setMod(11);
 
-    foreach (n; 0 .. 50 + 1)
-    {
+    foreach (n; 0 .. 50 + 1) {
         auto fw = FenwickTree!(modint)(n);
         foreach (i; 0 .. n)
             fw.add(i, modint(i * i));
         foreach (l; 0 .. n + 1)
-            foreach (r; l .. n + 1)
-            {
+            foreach (r; l .. n + 1) {
                 modint sum = 0;
                 foreach (i; l .. r)
                     sum += i * i;
@@ -112,8 +97,7 @@ unittest
     }
 }
 
-unittest
-{
+unittest {
     import std.exception;
 
     assertThrown!Error(FenwickTree!int(-1));
@@ -127,8 +111,7 @@ unittest
     assertThrown!Error(s.sum(5, 3));
 }
 
-unittest
-{
+unittest {
     auto fw = FenwickTree!(int)(10);
     fw.add(3, int.max);
     fw.add(5, int.min);
@@ -138,8 +121,7 @@ unittest
     assert(int.min == fw.sum(4, 10));
 }
 
-unittest
-{
+unittest {
     auto fw = FenwickTree!(long)(10);
     fw.add(3, long.max);
     fw.add(5, long.min);
@@ -149,20 +131,17 @@ unittest
     assert(long.min == fw.sum(4, 10));
 }
 
-unittest
-{
+unittest {
     auto fw = FenwickTree!(int)(20);
     long[20] a;
-    foreach (i; 0 .. 10)
-    {
+    foreach (i; 0 .. 10) {
         a[i] += int.max;
         fw.add(i, int.max);
     }
     a[5] += 11_111;
     fw.add(5, 11_111);
     foreach (l; 0 .. 20 + 1)
-        foreach (r; l .. 20 + 1)
-        {
+        foreach (r; l .. 20 + 1) {
             long sum;
             foreach (i; l .. r)
                 sum += a[i];
@@ -171,40 +150,32 @@ unittest
         }
 }
 
-// --- fenwicktree ---
+// --- start ---
 
-struct FenwickTree(T)
-{
+struct FenwickTree(T) {
     import std.traits : isSigned, Unsigned;
 
-    static if (isSigned!T)
-    {
+    static if (isSigned!T) {
         alias U = Unsigned!T;
-    }
-    else
-    {
+    } else {
         alias U = T;
     }
 public:
-    this(int n) @safe nothrow
-    {
+    this(int n) @safe nothrow {
         _n = n;
         data = new U[](n);
     }
 
-    void add(int p, T x) @safe nothrow @nogc
-    {
+    void add(int p, T x) @safe nothrow @nogc {
         assert(0 <= p && p < _n);
         p++;
-        while (p <= _n)
-        {
+        while (p <= _n) {
             data[p - 1] += cast(U) x;
             p += p & -p;
         }
     }
 
-    T sum(int l, int r) @safe nothrow @nogc
-    {
+    T sum(int l, int r) @safe nothrow @nogc {
         assert(0 <= l && l <= r && r <= _n);
         return sum(r) - sum(l);
     }
@@ -213,11 +184,9 @@ private:
     int _n;
     U[] data;
 
-    U sum(int r) @safe nothrow @nogc
-    {
+    U sum(int r) @safe nothrow @nogc {
         U s = 0;
-        while (r > 0)
-        {
+        while (r > 0) {
             s += data[r - 1];
             r -= r & -r;
         }

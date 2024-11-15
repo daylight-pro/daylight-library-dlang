@@ -1,7 +1,6 @@
 module acl.internal_bit;
 
-unittest
-{
+unittest {
     assert(0 == celiPow2(0));
     assert(0 == celiPow2(1));
     assert(1 == celiPow2(2));
@@ -17,8 +16,7 @@ unittest
     assert(31 == celiPow2(int.max));
 }
 
-unittest
-{
+unittest {
     import core.bitop : bsf;
 
     assert(0 == bsf(1));
@@ -36,10 +34,9 @@ unittest
     assert(0 == bsf(uint.max));
 }
 
-// --- internal_bit ---
+// --- start ---
 
-int celiPow2(int n) @safe pure nothrow @nogc
-{
+int celiPow2(int n) @safe pure nothrow @nogc {
     int x = 0;
     while ((1u << x) < cast(uint)(n))
         x++;

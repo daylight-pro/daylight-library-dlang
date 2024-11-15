@@ -1,6 +1,8 @@
 module daylight.string.rolling_hash;
 import std;
 
+// --- start ---
+
 struct RollingHash {
     private static const ulong mod = (1UL << 61) - 1;
     private static ulong base = 0;

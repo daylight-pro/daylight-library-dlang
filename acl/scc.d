@@ -1,23 +1,23 @@
 module scc;
 
+// --- start ---
 import acl.internal_scc;
 
-unittest
-{
+// --- end ---
+
+unittest {
     SccGraph graph0;
     assert([] == graph0.scc());
     auto graph1 = SccGraph(0);
     assert([] == graph1.scc());
 }
 
-unittest
-{
+unittest {
     SccGraph graph;
     graph = SccGraph(10);
 }
 
-unittest
-{
+unittest {
     auto graph = SccGraph(2);
     graph.addEdge(0, 1);
     graph.addEdge(1, 0);
@@ -25,8 +25,7 @@ unittest
     assert(1 == scc.length);
 }
 
-unittest
-{
+unittest {
     auto graph = SccGraph(2);
     graph.addEdge(0, 0);
     graph.addEdge(0, 0);
@@ -35,33 +34,28 @@ unittest
     assert(2 == scc.length);
 }
 
-unittest
-{
+unittest {
     import std.exception;
 
     auto graph = SccGraph(2);
     assertThrown!Error(graph.addEdge(0, 10));
 }
 
-// --- scc ---
+// --- start ---
 
-struct SccGraph
-{
-    this(int n) @safe nothrow
-    {
+struct SccGraph {
+    this(int n) @safe nothrow {
         internal = SccGraphImpl(n);
     }
 
-    void addEdge(int from, int to) @safe nothrow
-    {
+    void addEdge(int from, int to) @safe nothrow {
         int n = internal.numVerticles();
         assert(0 <= from && from < n);
         assert(0 <= to && to < n);
         internal.addEdge(from, to);
     }
 
-    int[][] scc() @safe nothrow
-    {
+    int[][] scc() @safe nothrow {
         return internal.scc();
     }
 
