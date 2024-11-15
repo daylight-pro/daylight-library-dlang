@@ -58,7 +58,7 @@ class BinaryTrie(T, int MAX_LOG = 32) {
     }
 
     private T getMin(T x, int cur, int b) {
-        if (b < 0)
+        if (b < 0 || cur == -1)
             return 0;
         push(cur, b);
         long nxt = (x >> T(b)) & T(1);
@@ -144,4 +144,10 @@ class BinaryTrie(T, int MAX_LOG = 32) {
         return length;
     }
 
+    bool opBinaryRight(string op)(T a) {
+        static if (op == "in") {
+            return this.count(a) > 0;
+        } else
+            static assert(false, "Operator " ~ op ~ " not implemented");
+    }
 }
