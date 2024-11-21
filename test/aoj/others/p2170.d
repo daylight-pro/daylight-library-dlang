@@ -1,6 +1,6 @@
-module test.aoj.others.p2160;
+module test.aoj.others.p2170;
 
-// verification-helper: PROBLEM https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2160
+// verification-helper: PROBLEM https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2170
 import std;
 import daylight.base;
 import daylight.graph.base;
