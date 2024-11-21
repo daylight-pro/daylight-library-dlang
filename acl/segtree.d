@@ -166,6 +166,7 @@ unittest {
 struct Segtree(S, alias op, alias e) {
     import std.functional : binaryFun, unaryFun;
     import std.traits : isCallable, Parameters;
+    import std.conv;
 
     static if (is(typeof(e) : string)) {
         auto unit() {
