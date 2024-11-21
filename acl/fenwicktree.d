@@ -191,7 +191,7 @@ public:
 
     T opIndexAssign(T value, size_t index) {
         int p = index.to!int;
-        int v = this[p];
+        int v = opIndex(index);
         add(p, value - v);
         return value;
     }
