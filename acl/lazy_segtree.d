@@ -360,6 +360,10 @@ public:
         return value;
     }
 
+    size_t opDollar() {
+        return _n;
+    }
+
     S prod(int l, int r) {
         assert(0 <= l && l <= r && r <= _n);
         if (l == r)

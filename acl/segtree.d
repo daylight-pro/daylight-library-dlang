@@ -222,6 +222,23 @@ struct Segtree(S, alias op, alias e) {
         return binaryFun!(op)(sml, smr);
     }
 
+    S opIndex(size_t index) {
+        return get(index.to!int);
+    }
+
+    S opSlice(size_t start, size_t end) {
+        return prod(start.to!int, end.to!int);
+    }
+
+    S opIndexAssign(S value, size_t index) {
+        set(index.to!int, value);
+        return value;
+    }
+
+    size_t opDollar() {
+        return _n;
+    }
+
     S allProd() {
         return d[1];
     }
