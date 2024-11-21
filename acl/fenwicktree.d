@@ -180,6 +180,34 @@ public:
         return sum(r) - sum(l);
     }
 
+    T opIndex(size_t index) {
+        return sum(index.to!int, (index + 1).to!int);
+    }
+
+    T opSlice(size_t start, size_t end) {
+        return sum(start.to!int, end.to!int);
+    }
+
+    T opIndexAssign(T value, size_t index) {
+        int p = index.to!int;
+        int v = this[p];
+        add(p, value - v);
+        return value;
+    }
+
+    T opIndexOpAssign(string op)(T value, size_t index) {
+        static if (op == "+") {
+            this.add(index.to!int, value);
+        } else {
+            assert(false, "Operator " ~ op ~ " is not implemented.");
+        }
+        return this[index];
+    }
+
+    size_t opDollar() {
+        return _n;
+    }
+
 private:
     int _n;
     U[] data;

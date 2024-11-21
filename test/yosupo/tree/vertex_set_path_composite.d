@@ -41,8 +41,8 @@ void main() {
     auto seg = Segtree!(P, op, e)(N);
     auto seg2 = Segtree!(P, op2, e)(N);
     foreach (i; 0 .. N) {
-        seg.set(hld.index(i), P(mint(A[i]), mint(B[i])));
-        seg2.set(hld.index(i), P(mint(A[i]), mint(B[i])));
+        seg[hld.index(i)] = P(mint(A[i]), mint(B[i]));
+        seg2[hld.index(i)] = P(mint(A[i]), mint(B[i]));
     }
     while (Q-- > 0) {
         int k;
@@ -50,8 +50,8 @@ void main() {
         if (k == 0) {
             int p, c, d;
             reader.read(p, c, d);
-            seg.set(hld.index(p), P(mint(c), mint(d)));
-            seg2.set(hld.index(p), P(mint(c), mint(d)));
+            seg[hld.index(p)] = P(mint(c), mint(d));
+            seg2[hld.index(p)] = P(mint(c), mint(d));
         } else {
             int u, v, y;
             reader.read(u, v, y);
@@ -61,10 +61,10 @@ void main() {
                 bool rev;
                 AliasSeq!(l, r, rev) = t;
                 if (rev) {
-                    auto s = seg2.prod(l, r);
+                    auto s = seg2[l .. r];
                     x = s[0] * x + s[1];
                 } else {
-                    auto s = seg.prod(l, r);
+                    auto s = seg[l .. r];
                     x = s[0] * x + s[1];
                 }
             }
