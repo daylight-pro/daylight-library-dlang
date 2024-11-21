@@ -154,6 +154,7 @@ unittest {
 
 struct FenwickTree(T) {
     import std.traits : isSigned, Unsigned;
+    import std.conv;
 
     static if (isSigned!T) {
         alias U = Unsigned!T;
