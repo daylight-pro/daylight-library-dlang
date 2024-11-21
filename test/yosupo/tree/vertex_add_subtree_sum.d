@@ -21,7 +21,7 @@ void main() {
     hld.build();
     auto fw = FenwickTree!long(N);
     foreach (i; 0 .. N) {
-        fw.add(hld.index(i), A[i]);
+        fw[hld.index(i)] += A[i];
     }
     while (Q--) {
         int k;
@@ -29,12 +29,12 @@ void main() {
         if (k == 0) {
             int u, x;
             reader.read(u, x);
-            fw.add(hld.index(u), x);
+            fw[hld.index(u)] += x;
         } else {
             int u;
             reader.read(u);
             auto lr = hld.subtree_query(u);
-            writeln(fw.sum(lr[0], lr[1]));
+            writeln(fw[lr[0] .. lr[1]]);
         }
     }
 }

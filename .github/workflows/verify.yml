@@ -42,9 +42,9 @@ jobs:
           include: |
                 daylight
                 test
+                acl
           exclude: |
                 .github/
-                acl
           # If you have config.toml
           config: .verify-helper/config.toml
       - name: parse-doxygen
