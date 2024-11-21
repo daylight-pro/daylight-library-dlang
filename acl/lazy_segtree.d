@@ -273,6 +273,7 @@ unittest {
 struct LazySegTree(S, alias op, alias e, F, alias mapping, alias composition, alias id) {
     import std.functional : unaryFun, binaryFun;
     import std.traits : isCallable, Parameters;
+    import std.conv;
 
     static if (is(typeof(e) : string)) {
         auto unit() {
@@ -326,6 +327,41 @@ public:
         foreach_reverse (i; 1 .. log + 1)
             push(p >> i);
         return d[p];
+    }
+
+    S opIndex(size_t index) {
+        return get(index.to!int);
+    }
+
+    S opSlice(size_t start, size_t end) {
+        return prod(start.to!int, end.to!int);
+    }
+
+    S opIndexAssign(S value, size_t index) {
+        set(index.to!int, value);
+        return value;
+    }
+
+    S opIndexOpAssign(string op)(F value, size_t index) {
+        static if (op == "~") {
+            this.apply(index.to!int, value);
+        } else {
+            assert(false, "Operator " ~ op ~ " is not implemented.");
+        }
+        return value;
+    }
+
+    S opSliceOpAssign(string op)(F value, size_t start, size_t end) {
+        static if (op == "~") {
+            this.apply(start.to!int, end.to!int, value);
+        } else {
+            assert(false, "Operator " ~ op ~ " is not implemented.");
+        }
+        return value;
+    }
+
+    size_t opDollar() {
+        return _n;
     }
 
     S prod(int l, int r) {

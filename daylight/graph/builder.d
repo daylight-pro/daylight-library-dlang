@@ -7,7 +7,7 @@ import std;
 import daylight.base;
 import daylight.graph.base;
 
-class GraphBuilder(T = long) {
+struct GraphBuilder(T = long) {
     private int N, M;
     private Graph!T G;
     private int index = 1;
@@ -125,11 +125,11 @@ class GraphBuilder(T = long) {
                 reader.read(p);
                 p -= index;
                 T c = T.init + 1;
-                if (weighted) {
+                if (m_weighted) {
                     reader.read(c);
                 }
                 edges ~= Edge!T(p, i, c);
-                if (!directed) {
+                if (!m_directed) {
                     edges ~= Edge!T(i, p, c);
                 }
             }
@@ -140,11 +140,11 @@ class GraphBuilder(T = long) {
                 u -= index;
                 v -= index;
                 T c = T.init + 1;
-                if (weighted) {
+                if (m_weighted) {
                     reader.read(c);
                 }
                 edges ~= Edge!T(u, v, c);
-                if (directed) {
+                if (m_directed) {
                     edges ~= Edge!T(v, u, c);
                 }
             }
