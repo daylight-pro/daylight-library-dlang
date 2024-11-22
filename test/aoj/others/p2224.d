@@ -16,7 +16,8 @@ void main() {
     reader.read(PQ);
     auto G = new Edges!double(N);
     double dist(long u, long v) {
-        return ((XY[u][0] - XY[v][0]) ^^ 2 + (XY[u][1] - XY[v][1]) ^^ 2).to!double ^^ 0.5;
+        return ((XY[u][0] - XY[v][0]) * (XY[u][0] - XY[v][0]) + (
+                XY[u][1] - XY[v][1]) * (XY[u][1] - XY[v][1])).to!double.sqrt;
     }
 
     double sum = 0;
