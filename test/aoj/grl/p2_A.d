@@ -11,6 +11,6 @@ void main() {
     int V, E;
     reader.read(V, E);
     auto G = (new GraphBuilder!long(V, E)).weighted.directed.setIndex(0).buildEdgeList(reader);
-    auto ans = kruskal(V, G);
+    auto ans = kruskal!long(V, G);
     writeln(ans);
 }
