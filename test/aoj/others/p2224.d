@@ -14,7 +14,7 @@ void main() {
     reader.read(XY);
     long[][] PQ = new long[][](M, 2);
     reader.read(PQ);
-    auto G = new Edges!double(N);
+    auto G = new Edges!double;
     double dist(long u, long v) {
         return ((XY[u][0] - XY[v][0]) * (XY[u][0] - XY[v][0]) + (
                 XY[u][1] - XY[v][1]) * (XY[u][1] - XY[v][1])).to!double.sqrt;
