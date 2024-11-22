@@ -1,6 +1,7 @@
 module test.aoj.others.p2224;
 
 // verification-helper: PROBLEM https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2224
+// verification-helper: ERROR 1e-3
 import std;
 import daylight.base;
 import daylight.graph.base;
