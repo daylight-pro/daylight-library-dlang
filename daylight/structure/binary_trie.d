@@ -99,7 +99,7 @@ class BinaryTrie(T, int MAX_LOG = 32) {
 
     private T kthMin(long k, int cur, int b) {
         if (b < 0)
-            return -1;
+            return 0;
         push(cur, b);
         int lower_ind = nodes[cur].next[0];
         long lower_cnt = 0;
