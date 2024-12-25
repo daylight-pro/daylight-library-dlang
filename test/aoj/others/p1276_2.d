@@ -9,19 +9,18 @@ void main() {
     Reader reader = new Reader();
     int K;
     reader.read(K);
-    bool[] isPrime;
-    eratos(1_299_710, isPrime);
+    auto eratos = Eratos(1_299_710);
     while (K != 0) {
-        if (isPrime[K]) {
+        if (eratos[K]) {
             0.writeln;
             reader.read(K);
             continue;
         }
         int ans = 1;
-        for (int i = K; !isPrime[i]; i++) {
+        for (int i = K; !eratos[i]; i++) {
             ans++;
         }
-        for (int i = K - 1; !isPrime[i]; i--) {
+        for (int i = K - 1; !eratos[i]; i--) {
             ans++;
         }
         ans.writeln;
