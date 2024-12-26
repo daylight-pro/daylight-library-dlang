@@ -46,7 +46,7 @@ class RangeTree(K, M) {
                 } else if (a[i] <= b[j]) {
                     c[k++] = a[i++];
                 } else {
-                    c[k++] = b[i++];
+                    c[k++] = b[j++];
                 }
             }
             c.sort.uniq;
