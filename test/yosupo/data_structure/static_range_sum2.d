@@ -1,6 +1,6 @@
 module test.yosupo.data_structure.static_range_sum2;
 
-// verificaton-helper: PROBLEM https://judge.yosupo.jp/problem/static_range_sum
+// competitive-verifier: PROBLEM https://judge.yosupo.jp/problem/static_range_sum
 
 import std;
 import daylight.base;
