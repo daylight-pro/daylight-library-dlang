@@ -1,89 +1,72 @@
-module daylight.structure.range_tree;
+module test.yosupo.data_structure.point_add_rectangle_sum;
+
+// competitive-verifier: PROBLEM https://judge.yosupo.jp/problem/point_add_rectangle_sum
 
 import std;
+import daylight.base;
+import acl.fenwicktree;
+import daylight.structure.range_tree;
 
-// --- start --
-
-class RangeTree(K, M) {
-    alias S = M.S;
-    alias D = M.D;
-    private Tuple!(K, K)[] ps;
-    private K[] xs;
-    private K[][] ys;
-    private D[] ds;
-    int n;
-
-    private ulong id(K x) const {
-        return assumeSorted(xs).lowerBound(x).length;
+struct M {
+    alias S = long;
+    alias D = FenwickTree!long;
+    static S op(S a, S b) {
+        return a + b;
     }
 
-    private ulong id(int k, K y) const {
-        return assumeSorted(ys[k]).lowerBound(y).length;
+    static S e() {
+        return 0;
     }
 
-    void add(K x, K y) {
-        ps ~= tuple(x, y);
+    static void apply(ref D d, int i, S a) {
+        d.add(i, a);
     }
 
-    void build() {
-        ps.sort.uniq;
-        n = ps.length.to!int;
-        xs = ps.map!(p => p[0]).array;
-        ys = new K[][](2 * n);
-        ds = new D[2 * n];
-        foreach (i; 0 .. n) {
-            ys[i + n] = [ps[i][1]];
-            ds[i + n] = M.create(1);
-        }
-        void merge(ref const K[] a, ref const K[] b, ref K[] c) {
-            c = new K[a.length + b.length];
-            auto i = 0, j = 0, k = 0;
-            while (k < c.length) {
-                if (i == a.length) {
-                    c[k++] = b[j++];
-                } else if (j == b.length) {
-                    c[k++] = a[i++];
-                } else if (a[i] <= b[j]) {
-                    c[k++] = a[i++];
-                } else {
-                    c[k++] = b[j++];
-                }
-            }
-            c.sort.uniq;
-        }
-
-        foreach_reverse (i; 0 .. n) {
-            merge(ys[i << 1], ys[(i << 1) | 1], ys[i]);
-            ds[i] = M.create(ys[i].length.to!int);
-        }
+    static S prod(ref D d, int l, int r) {
+        return d.sum(l, r);
     }
 
-    void apply(K x, K y, S a) {
-        int k = (assumeSorted(ps).lowerBound(tuple(x, y)).length + n).to!int;
-        while (k > 0) {
-            M.apply(ds[k], id(k, y).to!int, a);
-            k >>= 1;
+    static D create(int n) {
+        return FenwickTree!long(n);
+    }
+}
+
+void main() {
+    Reader reader = new Reader();
+    int N, Q;
+    reader.read(N, Q);
+    alias Tuple!(int, long, long, long, long) T;
+    T[] queries = new T[0];
+    auto rt = new RangeTree!(long, M);
+    foreach (i; 0 .. N) {
+        long x, y, w;
+        reader.read(x, y, w);
+        rt.add(x, y);
+        queries ~= T(0, x, y, w, -1);
+    }
+    foreach (i; 0 .. Q) {
+        int t;
+        reader.read(t);
+        if (t == 0) {
+            long x, y, w;
+            reader.read(x, y, w);
+            rt.add(x, y);
+            queries ~= T(0, x, y, w, -1);
+        } else {
+            long l, d, r, u;
+            reader.read(l, d, r, u);
+            queries ~= T(1, l, d, r, u);
         }
     }
-
-    S prod(K x1, K y1, K x2, K y2) {
-        S res1 = M.e();
-        S res2 = M.e();
-        int l = id(x1).to!int + n;
-        int r = id(x2).to!int + n;
-        while (l < r) {
-            if (l & 1) {
-                res1 = M.op(res1, M.prod(ds[l], id(l, y1).to!int, id(l, y2).to!int));
-                l++;
-            }
-            if (r & 1) {
-                r--;
-                res2 = M.op(M.prod(ds[r], id(r, y1).to!int, id(r, y2).to!int), res2);
-            }
-            l >>= 1;
-            r >>= 1;
+    rt.build();
+    foreach (q; queries) {
+        int t;
+        long x, y, w, u;
+        AliasSeq!(t, x, y, w, u) = q;
+        if (t == 0) {
+            rt.apply(x, y, w);
+        } else {
+            rt.prod(x, y, w, u).writeln;
         }
-        return M.op(res1, res2);
     }
-
 }
