@@ -39,10 +39,6 @@ jobs:
         with:
           output-path: verify_files.json
           # Specify patterns
-          include: |
-                daylight
-                test
-                acl
           exclude: |
                 .github/
           # If you have config.toml
