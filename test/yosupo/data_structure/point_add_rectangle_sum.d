@@ -1,4 +1,4 @@
-module daylight.structure.range_tree;
+module test.yosupo.data_structure.point_add_rectangle_sum;
 
 // competitive-verifier: PROBLEM https://judge.yosupo.jp/problem/point_add_rectangle_sum
 
@@ -14,12 +14,20 @@ struct M {
         return a + b;
     }
 
+    static S e() {
+        return 0;
+    }
+
     static void apply(ref D d, int i, S a) {
         d.add(i, a);
     }
 
     static S prod(ref D d, int l, int r) {
         return d.sum(l, r);
+    }
+
+    static D create(int n) {
+        return FenwickTree!long(n);
     }
 }
 
@@ -39,7 +47,7 @@ void main() {
     foreach (i; 0 .. Q) {
         int t;
         reader.read(t);
-        if (t = 0) {
+        if (t == 0) {
             long x, y, w;
             reader.read(x, y, w);
             rt.add(x, y);
@@ -58,7 +66,7 @@ void main() {
         if (t == 0) {
             rt.apply(x, y, w);
         } else {
-            rt.prod(x, y, w + 1, u + 1).writeln;
+            rt.prod(x, y, w, u).writeln;
         }
     }
 }
