@@ -1,5 +1,7 @@
 module daylight.structure.range_tree;
 
+// competitive-verifier: PROBLEM https://judge.yosupo.jp/problem/point_add_rectangle_sum
+
 import std;
 
 // --- start --
