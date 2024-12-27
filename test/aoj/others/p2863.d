@@ -1,6 +1,6 @@
 module test.aoj.others.p2863;
 
-// competitive-verifier: PROBLEM "https://onlinejudge.u-aizu.ac.jp/problems/2863"
+// competitive-verifier: PROBLEM https://onlinejudge.u-aizu.ac.jp/problems/2863
 
 import std;
 import daylight.base;
