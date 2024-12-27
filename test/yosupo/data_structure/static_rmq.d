@@ -1,6 +1,6 @@
 module test.yosupo.data_structure.static_rmq;
 
-// verificaton-helper: PROBLEM https://judge.yosupo.jp/problem/static_rmq
+// competitive-verifier: PROBLEM https://judge.yosupo.jp/problem/static_rmq
 
 import std;
 import daylight.base;
