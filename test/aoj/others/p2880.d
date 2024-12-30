@@ -1,5 +1,7 @@
 module test.aoj.others.p2880;
 
+// competitive-verifier: PROBLEM https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=2880
+
 import std;
 import daylight.base;
 import daylight.range;
