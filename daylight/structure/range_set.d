@@ -272,7 +272,7 @@ class RangeSet(T) {
         }
         if (R.get.r.isNull)
             return Nullable!(T)();
-        int ans = R.get.r.get;
+        T ans = R.get.r.get;
         if (R.get.boundary[1] == ']')
             ans++;
         return nullable(ans);
@@ -298,5 +298,13 @@ class RangeSet(T) {
             ret ~= r.toString;
         }
         return ret;
+    }
+
+    int opApply(int delegate(ref Range!T) dg) {
+        foreach (r; ranges) {
+            if (dg(r))
+                return 1;
+        }
+        return 0;
     }
 }
