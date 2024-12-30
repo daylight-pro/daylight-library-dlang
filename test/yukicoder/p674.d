@@ -1,5 +1,7 @@
 module test.yukicoder.p674;
 
+// competitive-verifier: PROBLEM https://yukicoder.me/problems/no/674
+
 import std;
 import daylight.base;
 import daylight.range;
