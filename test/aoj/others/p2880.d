@@ -40,8 +40,6 @@ void main() {
             event.popFront();
             range_set.add(Range!int(e[1], e[2], "[]"));
         }
-        range_set.writeln;
-
         ans[i] = S >= T || range_set.same(S, T);
     }
     foreach (e; ans) {
