@@ -45,22 +45,23 @@ class RangeSet(T) {
         Range!T[] to_add = new Range!T[](0);
         if (!it.empty()) {
             auto ra = it.back;
-            if (ra.contact(r)) {
+            if (ra.contains(r)) {
                 to_erase ~= ra;
-                Range!T tmp = ra;
-                auto ret = r.l;
-                if (!ret.isNull) {
-                    tmp.r = ret.get;
+                auto tmp = ra;
+                if (!r.l.isNull) {
+                    tmp.r = r.l.get;
                     tmp.boundary[1] = r.boundary[0] == '[' ? ')' : ']';
                 }
                 if (!tmp.empty()) {
                     to_add ~= tmp;
                 }
                 tmp = ra;
-                ret = r.r;
-                if (!ret.isNull) {
-                    tmp.l = ret.get;
+                if (!r.r.isNull) {
+                    tmp.l = r.r.get;
                     tmp.boundary[0] = r.boundary[1] == ']' ? '(' : '[';
+                }
+                if (!tmp.empty()) {
+                    to_add ~= tmp;
                 }
             } else if (r.l.isNull) {
                 to_erase ~= ra;
@@ -76,7 +77,7 @@ class RangeSet(T) {
                 }
             }
         }
-        auto upper = ranges.upperBound(Range!T(r.l, r.l, "[)"));
+        auto upper = ranges.upperBound(Range!T(r.l, nullable(T.min), "[)"));
         foreach (i; upper) {
             if (!r.contact(i)) {
                 break;
@@ -87,7 +88,7 @@ class RangeSet(T) {
                 to_erase ~= i;
                 if (!r.r.isNull) {
                     Range!T tmp = i;
-                    tmp.l = i.l;
+                    tmp.l = r.r;
                     tmp.boundary[0] = r.boundary[1] == ']' ? '(' : '[';
                     if (!tmp.empty()) {
                         to_add ~= tmp;
@@ -105,6 +106,9 @@ class RangeSet(T) {
 
     Nullable!(Range!T) opIndex(T x) const {
         auto r = Range!T(nullable(x), nullable(x), "[]");
+        if (r in ranges) {
+            return nullable(r);
+        }
         auto lower = ranges.lowerBound(Range!T(nullable(x), nullable(x), "[]"));
         auto upper = ranges.upperBound(Range!T(nullable(x), nullable(x), "[)"));
         if (!upper.empty()) {
@@ -213,7 +217,7 @@ class RangeSet(T) {
         return ret;
     }
 
-    T countIntegerPoint(Range!T r) const {
+    T countIntegerPoint(Range!T r = Range!T(null, null, "()")) const {
         if (r in ranges) {
             return r.countIntegerPoint();
         }
@@ -239,7 +243,7 @@ class RangeSet(T) {
         return ret;
     }
 
-    T countMiddlePoint(Range!T r) const {
+    T countMiddlePoint(Range!T r = Range!T(null, null, "()")) const {
         if (r in ranges) {
             return r.countMiddlePoint();
         }
@@ -306,5 +310,9 @@ class RangeSet(T) {
                 return 1;
         }
         return 0;
+    }
+
+    bool empty() const {
+        return ranges.empty;
     }
 }

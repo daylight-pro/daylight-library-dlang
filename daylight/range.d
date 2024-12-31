@@ -9,9 +9,9 @@ struct Range(T) {
     char[2] boundary = "[)";
     int id = -1;
 
-    // -1: this < r
-    // 0: this == r
-    // 1: this > r
+    // -1: this < other 
+    // 0: this == other
+    // 1: this > other
     int compareLeft(const ref Range!T other) const {
         if (!l.isNull && other.l.isNull)
             return 1;
@@ -24,9 +24,9 @@ struct Range(T) {
         if (l.get > other.l.get)
             return 1;
         if (boundary[0] == '(' && other.boundary[0] == '[')
-            return -1;
-        if (boundary[0] == '[' && other.boundary[0] == '(')
             return 1;
+        if (boundary[0] == '[' && other.boundary[0] == '(')
+            return -1;
         return 0;
     }
 
@@ -42,9 +42,9 @@ struct Range(T) {
         if (r.get > other.r.get)
             return 1;
         if (boundary[1] == ']' && other.boundary[1] == ')')
-            return -1;
-        if (boundary[1] == ')' && other.boundary[1] == ']')
             return 1;
+        if (boundary[1] == ')' && other.boundary[1] == ']')
+            return -1;
         return 0;
     }
 
@@ -154,7 +154,7 @@ struct Range(T) {
     bool empty() const {
         if (l.isNull || r.isNull)
             return false;
-        return l.get == r.get && (boundary[0] == ')' || boundary[1] == '(');
+        return l.get > r.get || (l.get == r.get && (boundary[0] == ')' || boundary[1] == '('));
     }
 
     bool opEquals(const ref Range!T other) const {
@@ -182,9 +182,49 @@ struct Range(T) {
         this.id = id;
     }
 
+    this(string range, int id = -1) {
+        auto s = range.splitter(",");
+        auto lstr = s.front;
+        s.popFront();
+        auto rstr = s.front;
+        if (lstr[1 .. $].strip() == "-inf") {
+            l.nullify();
+        } else {
+            l = lstr[1 .. $].strip().to!T;
+        }
+        if (rstr[0 .. $ - 1].strip() == "inf") {
+            r.nullify();
+        } else {
+            r = rstr[0 .. $ - 1].strip().to!T;
+        }
+        boundary[0] = lstr[0];
+        boundary[1] = rstr[$ - 1];
+    }
+
     this(T l, T r, char[2] boundary = "[)", int id = -1) {
         this.l = nullable(l);
         this.r = nullable(r);
+        this.boundary = boundary;
+        this.id = id;
+    }
+
+    this(void* l, T r, char[2] boundary = "[)", int id = -1) {
+        this.l.nullify();
+        this.r = nullable(r);
+        this.boundary = boundary;
+        this.id = id;
+    }
+
+    this(T l, void* r, char[2] boundary = "[)", int id = -1) {
+        this.l = nullable!T(l);
+        this.r.nullify();
+        this.boundary = boundary;
+        this.id = id;
+    }
+
+    this(void* l, void* r, char[2] boundary = "[)", int id = -1) {
+        this.l.nullify();
+        this.r.nullify();
         this.boundary = boundary;
         this.id = id;
     }
