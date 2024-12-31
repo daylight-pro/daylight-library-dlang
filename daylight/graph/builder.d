@@ -144,7 +144,7 @@ struct GraphBuilder(T = long) {
                     reader.read(c);
                 }
                 edges ~= Edge!T(u, v, c);
-                if (m_directed) {
+                if (!m_directed) {
                     edges ~= Edge!T(v, u, c);
                 }
             }
